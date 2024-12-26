@@ -1,0 +1,26 @@
+{
+  "name": "feedback_management_system",
+  "version": "1.0.0",
+  "description": "This is group work of Arsen, Artyom, Bauyrzhan, Rayimbek. Feedback Management system An app for companies to collect, analyze and display customer feedback.",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kn1ghtich/feedback_management_system.git"
+  },
+  "author": "Arsen, Artyom, Bauyrzhan, Rayimbek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kn1ghtich/feedback_management_system/issues"
+  },
+  "homepage": "https://github.com/kn1ghtich/feedback_management_system#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
+  }
+}
