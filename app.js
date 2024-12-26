@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = 3000;
-
+// use:  npm run dev
 const server = http.createServer((req, res) => {
     console.log('Server request');
 
