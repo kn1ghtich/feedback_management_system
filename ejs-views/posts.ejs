@@ -8,17 +8,18 @@
   <% posts.forEach(post => { %>
     <li>
       <article>
-        <h2><%= post.title %></h2>
-        <p><%= post.text %></p>
+        <h2><a href="/posts/<%= post._id %>"><%= post.title %></a></h2>        <p><%= post.text %></p>
         <p><strong>Author:</strong> <%= post.author %></p>
 
         <% if (post.author === username) { %> <!-- Check if the logged-in user is the author -->
 
-        <form action="/edit/<%= post._id %>" method="GET">
+        <form action="/edit/<%= post._id %>" method="GET"
+        style="display: flex; justify-content: flex-end;">
           <button type="submit">Edit</button>
         </form>
 
-        <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+        <form action="/posts/<%= post._id %>?_method=DELETE" method="POST"
+              style="display: flex; justify-content: flex-end;">
           <button type="submit">Delete</button>
         </form>
         <% } %>
@@ -26,5 +27,8 @@
     </li>
   <% }) %>
 </ul>
+
+
+
 </body>
 </html>

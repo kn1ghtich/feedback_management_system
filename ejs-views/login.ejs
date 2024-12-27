@@ -3,13 +3,26 @@
 <%- include('./partials/head.ejs') %>
 <body>
 <%- include('./partials/nav.ejs') %>
-<h1>Login</h1>
-<form action="/login" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    <button type="submit">Login</button>
-</form>
+<div class="container">
+    <h1>Login</h1>
+    <form action="/login" method="POST"> <!-- This action submits the login form -->
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <button type="submit">Login</button>
+        </div>
+    </form>
+
+    <!-- Options to Register or Stay on Login -->
+    <div class="options">
+        <p>Don't have an account? <a href="/register">Register here</a>.</p>
+    </div>
+</div>
 </body>
 </html>
