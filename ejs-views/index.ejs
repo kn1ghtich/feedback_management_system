@@ -6,5 +6,13 @@
 <h1>Feedback Management System</h1>
 <p>Build with Node.js Express, EJS, MongoDB.</p>
 <p>In the future will be added Bootstrap</p>
+
+<% if (username) { %>
+    <p>Logged in as: <%= username %></p>
+    <a href="/logout">Logout</a>
+<% } else { %>
+    <a href="/login">Login</a> | <a href="/register">Register</a>
+<% } %>
 </body>
 </html>
+

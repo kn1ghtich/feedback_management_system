@@ -2,6 +2,9 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
+const User = require('./models/user');
 const methodOverride = require('method-override');
 const Post = require('./models/post');
 const Contact = require('./models/contact');
@@ -25,17 +28,95 @@ app.listen(PORT, (error) => {
     error ? console.log(error) : console.log(`listening port ${PORT}`);
 });
 
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+}));
+
 app.use(express.urlencoded({ extended: false }));
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+// app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use(express.static('styles'));
 
 app.use(methodOverride('_method'));
+////////////////////////////////////////////
+// Show the registration form
+app.get('/register', (req, res) => {
+    const title = 'Register';
+    res.render(createPath('register'), { title });
+});
+
+// Handle registration form submission
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user in the database
+        const user = new User({ username, password: hashedPassword });
+        await user.save();
+
+        res.redirect('/login'); // Redirect to login page after successful registration
+    } catch (error) {
+        console.error(error);
+        res.render(createPath('error'), { title: 'Error', message: 'Registration failed' });
+    }
+});
+
+
+// Show the login form
+app.get('/login', (req, res) => {
+    const title = 'Login';
+    res.render(createPath('login'), { title });
+});
+
+// Handle login form submission
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        // Find the user by username
+        const user = await User.findOne({ username });
+
+        if (user) {
+            // Compare the entered password with the stored hash
+            const match = await bcrypt.compare(password, user.password);
+
+            if (match) {
+                // Store username in the session
+                req.session.username = user.username;
+                return res.redirect('/'); // Redirect to home page after login
+            }
+        }
+
+        res.render(createPath('error'), { title: 'Error', message: 'Invalid username or password' });
+    } catch (error) {
+        console.error(error);
+        res.render(createPath('error'), { title: 'Error', message: 'Login failed' });
+    }
+});
+/////////////////////////
+// app.get('/', (req, res) => {
+//     const title = 'Home';
+//     res.render(createPath('index'), { title });
+// });
+
 
 app.get('/', (req, res) => {
     const title = 'Home';
-    res.render(createPath('index'), { title });
+    const username = req.session.username; // Get logged-in username
+    res.render(createPath('index'), { title, username });
+});
+
+
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
 });
 
 app.get('/contacts', (req, res) => {
