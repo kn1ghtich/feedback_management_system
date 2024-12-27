@@ -28,6 +28,41 @@ app.listen(PORT, (error) => {
     error ? console.log(error) : console.log(`listening port ${PORT}`);
 });
 
+// Middleware to check if user is logged in
+const authMiddleware = (req, res, next) => {
+    if (req.session && req.session.username) {
+        // User is authenticated
+        next();
+    } else {
+        // User is not authenticated, redirect to login
+        res.redirect('/login');
+    }
+};
+
+// Middleware to check if the logged-in user is the author of the post
+const isAuthorMiddleware = async (req, res, next) => {
+    try {
+        const { id } = req.params; // Post ID from the route
+        const post = await Post.findById(id); // Find the post by ID
+
+        if (!post) {
+            // Post not found, return error
+            return res.status(404).render(createPath('error'), { title: 'Error', message: 'Post not found' });
+        }
+
+        // Check if the logged-in user's username matches the post's author
+        if (post.author === req.session.username) {
+            return next(); // Continue if authorized
+        }
+
+        // If not authorized, return an error or redirect
+        return res.status(403).render(createPath('error'), { title: 'Error', message: 'Forbidden: You are not the author of this post' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render(createPath('error'), { title: 'Error', message: 'An error occurred' });
+    }
+};
+
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
@@ -39,7 +74,7 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use(express.static('styles'));
-
+app.use('/protected-styles', authMiddleware, express.static('styles'));
 app.use(methodOverride('_method'));
 ////////////////////////////////////////////
 // Show the registration form
@@ -53,14 +88,10 @@ app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create a new user in the database
         const user = new User({ username, password: hashedPassword });
         await user.save();
-
-        res.redirect('/login'); // Redirect to login page after successful registration
+        res.redirect('/login'); // Redirect to login page
     } catch (error) {
         console.error(error);
         res.render(createPath('error'), { title: 'Error', message: 'Registration failed' });
@@ -79,20 +110,14 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
-        // Find the user by username
         const user = await User.findOne({ username });
-
         if (user) {
-            // Compare the entered password with the stored hash
             const match = await bcrypt.compare(password, user.password);
-
             if (match) {
-                // Store username in the session
                 req.session.username = user.username;
                 return res.redirect('/'); // Redirect to home page after login
             }
         }
-
         res.render(createPath('error'), { title: 'Error', message: 'Invalid username or password' });
     } catch (error) {
         console.error(error);
@@ -106,7 +131,7 @@ app.post('/login', async (req, res) => {
 // });
 
 
-app.get('/', (req, res) => {
+app.get('/', authMiddleware, (req, res) => {
     const title = 'Home';
     const username = req.session.username; // Get logged-in username
     res.render(createPath('index'), { title, username });
@@ -121,8 +146,7 @@ app.get('/logout', (req, res) => {
 
 app.get('/contacts', (req, res) => {
     const title = 'Contacts';
-    Contact
-        .find()
+    Contact.find()
         .then(contacts => res.render(createPath('contacts'), { contacts, title }))
         .catch((error) => {
             console.log(error);
@@ -130,10 +154,9 @@ app.get('/contacts', (req, res) => {
         });
 });
 
-app.get('/posts/:id', (req, res) => {
+app.get('/posts/:id', authMiddleware, (req, res) => {
     const title = 'Post';
-    Post
-        .findById(req.params.id)
+    Post.findById(req.params.id)
         .then(post => res.render(createPath('post'), { post, title }))
         .catch((error) => {
             console.log(error);
@@ -141,70 +164,73 @@ app.get('/posts/:id', (req, res) => {
         });
 });
 
-app.delete('/posts/:id', (req, res) => {
-    Post
-        .findByIdAndDelete(req.params.id)
-        .then((result) => {
-            res.sendStatus(200);
+// DELETE route to delete a post
+app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
+    Post.findByIdAndDelete(req.params.id)
+        .then(() => res.sendStatus(200)) // Respond with 200 on success
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), { title: 'Error' });
+        });
+});
+
+// GET route to render the Edit Post form
+app.get('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
+    const title = 'Edit Post';
+
+    Post.findById(req.params.id)
+        .then((post) => res.render(createPath('edit-post'), { post, title }))
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), { title: 'Error' });
+        });
+});
+
+
+// PUT route to update a post
+app.put('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
+    const { title, text } = req.body; // Only update title and text
+    const { id } = req.params;
+
+    Post.findByIdAndUpdate(id, { title, text })
+        .then(() => res.redirect(`/posts/${id}`)) // Redirect to the updated post
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), { title: 'Error' });
+        });
+});
+
+app.get('/posts', authMiddleware, (req, res) => {
+    const title = 'Posts';
+    const username = req.session.username; // Get the username of the logged-in user
+
+    Post.find()
+        .sort({ createdAt: -1 }) // Sort posts (latest first)
+        .then(posts => {
+            res.render(createPath('posts'), { posts, title, username }); // Pass username to EJS view
         })
         .catch((error) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
         });
 });
-
-app.get('/edit/:id', (req, res) => {
-    const title = 'Edit Post';
-    Post
-        .findById(req.params.id)
-        .then(post => res.render(createPath('edit-post'), { post, title }))
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
-        });
-});
-
-app.put('/edit/:id', (req, res) => {
-    const { title, author, text } = req.body;
-    const { id } = req.params;
-    Post
-        .findByIdAndUpdate(id, { title, author, text })
-        .then((result) => res.redirect(`/posts/${id}`))
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
-        });
-});
-
-app.get('/posts', (req, res) => {
-    const title = 'Posts';
-    Post
-        .find()
-        .sort({ createdAt: -1 })
-        .then(posts => res.render(createPath('posts'), { posts, title }))
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
-        });
-});
-
 app.get('/add-post', (req, res) => {
     const title = 'Add Post';
     res.render(createPath('add-post'), { title });
 });
 
-app.post('/add-post', (req, res) => {
-    const { title, author, text } = req.body;
-    const post = new Post({ title, author, text });
-    post
-        .save()
-        .then((result) => res.redirect('/posts'))
+app.post('/add-post', authMiddleware, (req, res) => {
+    const { title, text } = req.body; // Only take title and text from the form
+    const author = req.session.username; // Get the currently logged-in user's username
+
+    const post = new Post({ title, author, text }); // Assign the author from the session
+    post.save()
+        .then(() => res.redirect('/posts')) // Redirect to the posts page after saving
         .catch((error) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
         });
 });
-
 app.use((req, res) => {
     const title = 'Error Page';
     res
