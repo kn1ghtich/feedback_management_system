@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const Post = require('./models/post');
 const Contact = require('./models/contact');
-
+//servachok
 const app = express();
 
 app.set('view engine', 'ejs');
