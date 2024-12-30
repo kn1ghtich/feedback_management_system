@@ -11,6 +11,8 @@ const Contact = require('./models/contact');
 
 const app = express();
 
+
+
 app.set('view engine', 'ejs');
 
 const PORT = 3000;
@@ -21,6 +23,15 @@ mongoose
     .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((res) => console.log('Connected to DB'))
     .catch((error) => console.log(error));
+
+/*
+app.use((req, res) => {
+    const title = 'Error Page';
+    res
+        .status(404)
+        .render(createPath('error'), { title });
+});
+*/
 
 const createPath = (page) => path.resolve(__dirname, 'ejs-views', `${page}.ejs`);
 
@@ -98,7 +109,10 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
+app.get('/about-us', (req, res) => {
+    res.redirect("/contacts")
+}
+)
 // Show the login form
 app.get('/login', (req, res) => {
     const title = 'Login';
@@ -162,6 +176,7 @@ app.get('/posts/:id', authMiddleware, (req, res) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
         });
+        
 });
 
 // DELETE route to delete a post
@@ -231,6 +246,7 @@ app.post('/add-post', authMiddleware, (req, res) => {
             res.render(createPath('error'), { title: 'Error' });
         });
 });
+
 app.use((req, res) => {
     const title = 'Error Page';
     res
