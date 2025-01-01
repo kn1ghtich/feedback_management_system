@@ -46,7 +46,7 @@ const authMiddleware = (req, res, next) => {
         // User is authenticated
         next();
     } else {
-        // User is not authenticated, redirect to login
+        // User is not authenticated, redirect to log in
         res.redirect('/login');
     }
 };
@@ -169,7 +169,7 @@ app.get('/contacts', (req, res) => {
         });
 });
 
-app.get('/posts/:id', authMiddleware, (req, res) => {
+app.get('/posts/:id', (req, res) => {
     const title = 'Post';
     Post.findById(req.params.id)
         .then(post => res.render(createPath('post'), { post, title }))
@@ -177,8 +177,8 @@ app.get('/posts/:id', authMiddleware, (req, res) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
         });
-        
 });
+
 
 // DELETE route to delete a post
 app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
@@ -216,20 +216,21 @@ app.put('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
         });
 });
 
-app.get('/posts', authMiddleware, (req, res) => {
+app.get('/posts', (req, res) => {
     const title = 'Posts';
-    const username = req.session.username; // Get the username of the logged-in user
+    const username = req.session?.username; // Get the username of the logged-in user (optional)
 
     Post.find()
         .sort({ createdAt: -1 }) // Sort posts (latest first)
         .then(posts => {
-            res.render(createPath('posts'), { posts, title, username }); // Pass username to EJS view
+            res.render(createPath('posts'), { posts, title, username }); // Pass username if logged in, else null
         })
         .catch((error) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
         });
 });
+
 app.get('/add-post', (req, res) => {
     const title = 'Add Post';
     res.render(createPath('add-post'), { title });
