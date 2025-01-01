@@ -18,6 +18,28 @@
   </button>
 </article>
 
+<h2>Comments</h2>
+
+<ul>
+  <% post.comments.forEach(comment => { %>
+    <li>
+      <p><strong><%= comment.author %>:</strong> <%= comment.text %></p>
+      <p><small>Posted on: <%= comment.createdAt.toLocaleString() %></small></p>
+    </li>
+  <% }) %>
+</ul>
+
+<% if (username) { %>
+  <!-- Show comment form only if the user is logged in -->
+  <form action="/posts/<%= post._id %>/comments" method="POST">
+    <textarea name="text" rows="3" cols="40" placeholder="Leave a comment..." required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+<% } else { %>
+  <p>You must <a href="/login">log in</a> to add a comment.</p>
+<% } %>
+
+
 <script>
   document.addEventListener('click', (e) => {
     const id = e.target?.dataset?.id || null;

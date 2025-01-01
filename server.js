@@ -1,4 +1,5 @@
 const express = require('express');
+const router = express.Router();
 const path = require('path');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -46,10 +47,17 @@ const authMiddleware = (req, res, next) => {
         // User is authenticated
         next();
     } else {
-        // User is not authenticated, redirect to log in
+        // User is not authenticated, redirect to login
         res.redirect('/login');
     }
 };
+
+function isAuthenticated(req, res, next) {
+    if (req.session.user) { // Assuming you store the logged-in user in the session
+        return next();
+    }
+    return res.status(401).send('You need to log in to perform this action');
+}
 
 // Middleware to check if the logged-in user is the author of the post
 const isAuthorMiddleware = async (req, res, next) => {
@@ -169,16 +177,82 @@ app.get('/contacts', (req, res) => {
         });
 });
 
+
+router.get('/posts/:id', async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+        res.json(post);
+    } catch (error) {
+        res.status(500).send('Server error');
+    }
+});
+
+// Route to add a comment
+router.post('/posts/:id/comments', isAuthenticated, async (req, res) => {
+    try {
+        const { text } = req.body;
+        if (!text) {
+            return res.status(400).send('Comment text is required');
+        }
+
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+
+        post.comments.push({ text, author: req.session.user.username }); // Assuming username is stored in session
+        await post.save();
+        res.status(200).send('Comment added successfully');
+    } catch (error) {
+        res.status(500).send('Server error');
+    }
+});
+
 app.get('/posts/:id', (req, res) => {
     const title = 'Post';
+
     Post.findById(req.params.id)
-        .then(post => res.render(createPath('post'), { post, title }))
+        .then(post => {
+            if (!post) {
+                return res.status(404).render(createPath('error'), { title: 'Error', message: 'Post not found' });
+            }
+
+            // Render the post with its comments
+            res.render(createPath('post'), { post, title, username: req.session.username });
+        })
         .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
+            console.error(error);
+            res.status(500).render(createPath('error'), { title: 'Error', message: 'Server error occurred' });
         });
 });
 
+app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
+    try {
+        const { text } = req.body;
+
+        if (!text) {
+            return res.status(400).send('Comment text is required');
+        }
+
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).send('Post not found');
+        }
+
+        // Add the comment with the logged-in user's username
+        post.comments.push({ text, author: req.session.username });
+        await post.save();
+
+        // Redirect back to the post page
+        res.redirect(`/posts/${req.params.id}`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).render(createPath('error'), { title: 'Error', message: 'Failed to add comment' });
+    }
+});
 
 // DELETE route to delete a post
 app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
@@ -218,19 +292,18 @@ app.put('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
 
 app.get('/posts', (req, res) => {
     const title = 'Posts';
-    const username = req.session?.username; // Get the username of the logged-in user (optional)
+    const username = req.session.username; // Get the username of the logged-in user
 
     Post.find()
         .sort({ createdAt: -1 }) // Sort posts (latest first)
         .then(posts => {
-            res.render(createPath('posts'), { posts, title, username }); // Pass username if logged in, else null
+            res.render(createPath('posts'), { posts, title, username }); // Pass username to EJS view
         })
         .catch((error) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
         });
 });
-
 app.get('/add-post', (req, res) => {
     const title = 'Add Post';
     res.render(createPath('add-post'), { title });
