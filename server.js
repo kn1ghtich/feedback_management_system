@@ -25,14 +25,6 @@ mongoose
     .then((res) => console.log('Connected to DB'))
     .catch((error) => console.log(error));
 
-/*
-app.use((req, res) => {
-    const title = 'Error Page';
-    res
-        .status(404)
-        .render(createPath('error'), { title });
-});
-*/
 
 const createPath = (page) => path.resolve(__dirname, 'ejs-views', `${page}.ejs`);
 
@@ -116,13 +108,10 @@ app.post('/register', async (req, res) => {
 });
 
 
-// Show the login form
 app.get('/login', (req, res) => {
     const title = 'Login';
     res.render(createPath('login'), { title });
 });
-
-// Handle login form submission
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -141,12 +130,6 @@ app.post('/login', async (req, res) => {
         res.render(createPath('error'), { title: 'Error', message: 'Login failed' });
     }
 });
-/////////////////////////
-// app.get('/', (req, res) => {
-//     const title = 'Home';
-//     res.render(createPath('index'), { title });
-// });
-
 app.get('/logout', (req, res) => {
     req.session.destroy(() => {
         res.redirect('/');
@@ -158,13 +141,51 @@ app.get('/logout', (req, res) => {
 
 
 
-app.get('/', authMiddleware, (req, res) => {
+// app.get('/', authMiddleware, (req, res) => {
+//     const title = 'Home';
+//     const username = req.session.username; // Get logged-in username
+//     res.render(createPath('index'), { title, username });
+// });
+// Index route
+
+// app.get('/', async  (req, res) => {
+//     try {
+//         const username = req.session.username; // Get the username from session (if logged in)
+//
+//         // Initialize an empty array for posts
+//         let userPosts = [];
+//
+//         // Fetch user-specific posts from the database if the user is logged in
+//         if (username) {
+//             userPosts = await Post.find({ author: username }).sort({ createdAt: -1 }); // Fetch all posts by the user
+//         }
+//
+//         // Render the `index.ejs` template with posts
+//         res.render(createPath('index'), {
+//             title: 'Home',       // Title for the page
+//             username,            // Pass the username
+//             posts: userPosts,    // Pass the array of posts (can be empty if user has no posts)
+//         });
+//     } catch (error) {
+//         console.error('Error fetching posts:', error);
+//         res.status(500).send('Server Error');
+//     }
+// });
+
+app.get('/', (req, res) => {
     const title = 'Home';
-    const username = req.session.username; // Get logged-in username
-    res.render(createPath('index'), { title, username });
+    const username = req.session.username; // Get the username of the logged-in user
+
+    Post.find({author: username})
+        .sort({ createdAt: -1 }) // Sort posts (latest first)
+        .then(posts => {
+            res.render(createPath('index'), { posts, title, username }); // Pass username to EJS view
+        })
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), { title: 'Error' });
+        });
 });
-
-
 
 
 

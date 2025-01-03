@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>FMS <%= title %></title>
@@ -9,30 +8,31 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <style>
-        /* Общий стиль для всех страниц */
+        /* Общие стили */
         body {
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
             box-sizing: border-box;
-            background: #fff; /* Белый фон */
-            color: #333; /* Основной цвет текста */
-            min-height: 100vh;
-            display: flex;
-            justify-content: center; /* Центровка по горизонтали */
-            align-items: center; /* Центровка по вертикали */
+            background: #fff;
+            color: #333;
+
+
         }
 
-        /* Навигационный бар */
+        /* Центрированная навигация */
         nav {
             width: 100%;
-            background: linear-gradient(to bottom, #4e54c8, #3b3e9a); /* Градиентный фон навигации */
+            background: linear-gradient(to bottom, #4e54c8, #3b3e9a);
             padding: 1rem 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Тень под навигацией */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             position: fixed;
             top: 0;
             left: 0;
             z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         nav ul {
@@ -49,49 +49,161 @@
 
         nav ul li a {
             text-decoration: none;
-            color: #fff; /* Белый текст для контраста с градиентом */
+            color: #fff;
             font-weight: bold;
             font-size: 1.1rem;
             padding: 0.5rem 1rem;
             border-radius: 20px;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background 0.3s, transform 0.2s;
         }
 
         nav ul li a:hover {
-            background: #6c70f1; /* Более светлый оттенок при наведении */
-            transform: scale(1.1); /* Лёгкое увеличение */
+            background: #6c70f1;
+            transform: scale(1.1);
         }
 
-        /* Основной контейнер страницы */
+        /* Заголовок страницы */
+        h1 {
+            text-align: center;
+            margin: 6rem 0 2rem;
+            color: #4e54c8;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Список постов */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        ul li {
+            margin-bottom: 2rem;
+        }
+
+        /* Карточка поста */
+        article {
+            background: linear-gradient(to bottom, #4e54c8, #6c70f1);
+            color: #fff;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: fadeIn 0.5s ease-in-out;
+            word-wrap: break-word; /* Принудительный перенос длинных слов */
+            overflow-wrap: break-word; /* Альтернативный способ для переноса текста */
+            max-width: 100%; /* Убедимся, что карточка не расширяется за пределы */
+        }
+
+        article h2 a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        article h2 a:hover {
+            text-decoration: underline;
+        }
+
+        article p {
+            margin: 0.5rem 0;
+            line-height: 1.6; /* Увеличенный интервал для лучшей читаемости */
+        }
+
+        article p strong {
+            color: #f1f1f1;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between; /* Автор слева, кнопки справа */
+            align-items: center; /* Выравниваем элементы по вертикали */
+            margin-top: 1rem; /* Отступ между текстом поста и метаинформацией */
+        }
+
+        /* Текст автора */
+        .post-meta p {
+            margin: 0; /* Убираем лишние отступы */
+            font-size: 1rem;
+            color: #f1f1f1;
+        }
+        /* Контейнер кнопок */
+        .buttons {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem; /* Расстояние между кнопками */
+            margin-top: 1rem;
+        }
+
+        /* Кнопки */
+        form button {
+            padding: 0.7rem;
+            background: #3b3e9a;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 100px; /* Устанавливаем одинаковую ширину */
+            text-align: center; /* Текст по центру кнопки */
+        }
+
+        form button:hover {
+            background: #6c70f1;
+            transform: scale(1.05);
+        }
+
+        form button:active {
+            transform: scale(1);
+        }
+
+        /* Анимация */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         .page-container {
+            margin: auto; /* Automatically centers the container horizontally and vertically */
             width: 100%;
             max-width: 400px;
-            background: linear-gradient(to bottom, #4e54c8, #6c70f1); /* Градиентный фон */
+            background: linear-gradient(to bottom, #4e54c8, #6c70f1);
             border-radius: 15px;
-            color: #fff; /* Белый текст */
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); /* Тень для выделения */
+            color: #fff;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
             padding: 2rem;
-            animation: fadeIn 0.5s ease-in-out; /* Плавное появление контейнера */
             text-align: center;
+
+            /* Add extra margin at the top to prevent overlap with the fixed nav bar */
+            margin-top: calc(60px + 2rem); /* Adjust based on your nav height plus extra spacing */
         }
 
-        /* Заголовки */
-        h1, h2 {
+        .page-container h1 {
             font-size: 1.8rem;
             color: #fff;
             margin-bottom: 1.5rem;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Мягкая тень для надписей */
         }
-
-        /* Текстовые элементы */
-        p {
+        .page-container p {
             font-size: 1.2rem;
             margin-top: 1rem;
             margin-bottom: 2rem;
             color: rgba(255, 255, 255, 0.9); /* Лёгкий контраст */
         }
-
-        /* Действия на странице (ссылки/кнопки) */
         .action {
             text-decoration: none;
             color: #fff;
@@ -108,31 +220,10 @@
             background: #6c70f1; /* Более светлый оттенок */
             transform: scale(1.05);
         }
-
-        /* Подсказки/отсутствие данных */
-        .no-data {
-            text-align: center;
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8); /* Лёгкий белый тон */
-            margin-top: 1rem;
-        }
-
-        /* Анимация появления */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
     </style>
 </head>
 
-<body class="home">
-
+<body>
 <nav>
     <ul>
         <li><a href="/">Home</a></li>
@@ -152,6 +243,39 @@
         <a href="/register" class="action">Register</a>
     <% } %>
 </div>
+
+<% if (username) { %> <!-- Check if user is logged in -->
+<h1>All your posts</h1>
+<% if (posts.length > 0) { %> <!-- Check if posts exist -->
+<ul>
+    <% posts.forEach(post => { %>
+        <li>
+            <a href="/posts/<%= post._id %>">
+                <article>
+                    <h2>
+                        <a href="/posts/<%= post._id %>" title="View Post">
+                            <%= post.title.length > 50 ? post.title.substring(0, 50) + '...' : post.title %>
+                        </a>
+                    </h2>
+                    <p>
+                        <%= post.text.length > 150 ? post.text.substring(0, 150) + '...' : post.text %>
+                    </p>
+
+                    <!-- Meta данные: автор и кнопки -->
+                    <div class="post-meta">
+                        <!-- Отображение автора -->
+                        <p><strong>Author:</strong> <%= post.author %></p>
+                        <p><%= post.createdAt.toLocaleDateString() %></p>
+                    </div>
+                </article>
+            </a>
+        </li>
+    <% }) %>
+</ul>
+<% } else { %>
+    <!-- Message when there are no posts -->
+    <h2 style="text-align: center">You have no posts. Consider creating one!</h2>
+<% } %>
+<% } %>
 </body>
 </html>
-

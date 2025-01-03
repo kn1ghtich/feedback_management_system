@@ -311,7 +311,7 @@
 
   <div class="post-meta">
     <h2><%= post.title %></h2>
-    <p><%= post.createdAt.toLocaleTimeString('eu-EU', { hour: '2-digit', minute: '2-digit'}) %>,      <%= post.createdAt.toLocaleDateString() %></p>
+    <p> <%= post.createdAt.toLocaleDateString() %></p>
   </div>
   <p><%= post.text %></p>
 
@@ -340,7 +340,8 @@
   <ul class="comments-list">
     <% post.comments.forEach(comment => { %>
       <li>
-        <p><strong><%= comment.author %>:</strong> <%= comment.text %></p>
+        <p><strong><%= comment.author %>:</strong> </p>
+        <p><%= comment.text %></p>
         <p><small><%= post.createdAt.toLocaleTimeString('eu-EU', { hour: '2-digit', minute: '2-digit'}) %>,      <%= post.createdAt.toLocaleDateString() %></small></p>
       </li>
     <% }) %>

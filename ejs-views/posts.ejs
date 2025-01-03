@@ -177,6 +177,8 @@
     }
   </style>
 </head>
+
+<body>
 <nav>
   <ul>
     <li><a href="/">Home</a></li>
@@ -194,18 +196,25 @@
     <li>
       <a href="/posts/<%= post._id %>">
       <article>
-        <h2><a href="/posts/<%= post._id %>" title="View Post"><%= post.title %></a></h2>
-        <p><%= post.text %></p>
+        <h2>
+          <a href="/posts/<%= post._id %>" title="View Post">
+            <%= post.title.length > 50 ? post.title.substring(0, 50) + '...' : post.title %>
+          </a>
+        </h2>
+        <p>
+          <%= post.text.length > 150 ? post.text.substring(0, 150) + '...' : post.text %>
+        </p>
 
         <!-- Meta данные: автор и кнопки -->
         <div class="post-meta">
           <!-- Отображение автора -->
           <p><strong>Author:</strong> <%= post.author %></p>
-          <p><%= post.createdAt.toLocaleTimeString('eu-EU', { hour: '2-digit', minute: '2-digit'}) %>,      <%= post.createdAt.toLocaleDateString() %> </p>
+          <p><%= post.createdAt.toLocaleDateString() %></p>
         </div>
       </article>
       </a>
     </li>
   <% }) %>
 </ul>
+</body>
 </html>
