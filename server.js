@@ -119,8 +119,8 @@ app.post('/register', async (req, res) => {
 });
 
 app.get('/about-us', (req, res) => {
-    res.redirect("/contacts")
-}
+        res.redirect("/contacts")
+    }
 )
 // Show the login form
 app.get('/login', (req, res) => {

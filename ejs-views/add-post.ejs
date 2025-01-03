@@ -1,14 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('./partials/head.ejs') %>
+
+<head>
+  <meta charset="UTF-8">
+  <title>FMS <%= title %></title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    /* Navigation Styles */
+    nav {
+      background-color: #1976D2; /* Blue color */
+      padding: 1rem;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    nav ul li {
+      margin: 0 1.5rem;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      transition: color 0.3s ease-in-out;
+    }
+
+    nav ul li a:hover {
+      color: #000; /* Black hover effect */
+    }
+
+    /* Add Post Page Styles */
+    h1 {
+      text-align: center;
+      margin-top: 2rem;
+      color: #1976D2; /* Blue header color */
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    /* Form Styles */
+    form {
+      max-width: 600px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    form input[type="text"],
+    form textarea {
+      width: 94.5%;
+      padding: 1rem;
+      resize: none;
+      margin-bottom: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease-in-out;
+    }
+
+    form input[type="text"]:focus,
+    form textarea:focus {
+      border-color: #1976D2; /* Blue border on focus */
+      outline: none;
+
+    }
+
+    /* Button Styles */
+    form button {
+      width: 100%;
+      padding: 1rem;
+      background-color: #1976D2; /* Blue button color */
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    form button:hover {
+      background-color: #1565C0; /* Darker blue on hover */
+    }
+
+  </style>
+</head>
+
 <body>
-<%- include('./partials/nav.ejs') %>
+<nav>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/posts">Posts</a></li>
+    <li><a href="/add-post">New Post</a></li>
+    <li><a href="/contacts">Contacts</a></li>
+  </ul>
+</nav>
 <h1>Add Post</h1>
 <form action="/add-post" method="POST">
   <label for="title">Title:</label>
   <input type="text" id="title" name="title" required>
   <label for="text">Content:</label>
-  <textarea id="text" name="text" required></textarea>
+  <textarea id="text" name="text" style="height: 100px" required></textarea>
   <button type="submit">Add Post</button>
 </form>
 </body>

@@ -1,8 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('./partials/head.ejs') %>
+
+<head>
+    <meta charset="UTF-8">
+    <title>FMS <%= title %></title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background-color: #1976D2; /* Blue color */
+            padding: 1rem;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 1.5rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: color 0.3s ease-in-out;
+        }
+
+        nav ul li a:hover {
+            color: #000; /* Black hover effect */
+        }
+
+        /* Contacts Page Styles */
+        h1 {
+            text-align: center;
+            margin-top: 2rem;
+            color: #1976D2; /* Blue header color */
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .contacts {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contacts li {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            flex: 1 1 200px; /* Flex-grow, Flex-shrink, и минимальная ширина */
+            max-width: 200px; /* Ограничение максимальной ширины */
+        }
+
+        .contacts li a {
+            text-decoration: none;
+            color: #1976D2;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: block;
+            text-align: center;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .contacts li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .contacts li a:hover {
+            color: #000; /* Black on hover */
+        }
+
+    </style>
+
+</head>
+
 <body>
-<%- include('./partials/nav.ejs') %>
+
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/posts">Posts</a></li>
+        <li><a href="/add-post">New Post</a></li>
+        <li><a href="/contacts">Contacts</a></li>
+    </ul>
+</nav>
+
 <h1>Contacts:</h1>
 <ul class="contacts">
     <% if (contacts.length) { %>
