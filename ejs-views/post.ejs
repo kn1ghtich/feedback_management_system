@@ -2,180 +2,301 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FMS <%= title %></title>
   <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
+
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
   <style>
+    /* --- Общий стиль --- */
     body {
-      font-family: 'Montserrat', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      font-family: 'Montserrat', sans-serif;
+      box-sizing: border-box;
+      background: #fff;
       color: #333;
+      min-height: 100vh;
     }
 
-    /* Navigation Bar */
+    /* Навигационный бар */
     nav {
-      background-color: #1976D2; /* Blue */
-      padding: 1rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      position: sticky;
+      width: 100%;
+      background: linear-gradient(to bottom, #4e54c8, #3b3e9a);
+      padding: 1rem 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      position: fixed;
       top: 0;
+      left: 0;
       z-index: 1000;
     }
 
     nav ul {
-      list-style: none;
       display: flex;
       justify-content: center;
-      margin: 0;
+      list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     nav ul li {
-      margin: 0 1.5rem;
+      margin: 0 15px;
     }
 
     nav ul li a {
-      color: white;
       text-decoration: none;
+      color: #fff;
       font-weight: bold;
-      font-size: 1.2rem;
-      transition: color 0.3s ease;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: background-color 0.3s, transform 0.2s;
     }
 
     nav ul li a:hover {
-      color: #000; /* Black on hover */
+      background: #6c70f1;
+      transform: scale(1.1);
     }
 
-    /* Post Article */
-    article.post {
-      margin: 2rem auto;
+    /* Контейнер поста */
+    .post-container {
+      width: 90%;
       max-width: 800px;
-      background: white;
-      padding: 1.5rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
+      margin: 100px auto 30px;
+      padding: 2rem;
+      background: linear-gradient(to bottom, #4e54c8, #6c70f1);
+      color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      animation: fadeIn 0.5s ease-in-out;
     }
 
-    article.post .info {
+    .post-container h2 {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .post-container h1 {
+      font-size: 2.2rem;
+      text-align: center;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      margin-bottom: 1rem;
+    }
+
+    .post-container .info {
       display: flex;
       justify-content: space-between;
       font-size: 0.9rem;
-      color: #555;
-      margin-bottom: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 1.5rem;
     }
 
-    article.post h1 {
-      margin-bottom: 1rem;
-      color: #1976D2;
-    }
-
-    article.post p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-bottom: 1rem;
-      color: #444;
-    }
-
-    .btn-edit, .btn-delete {
-      display: inline-block;
-      margin: 0.5rem 0;
-      padding: 0.5rem 1rem;
-      text-decoration: none;
+    .post-container p {
       font-size: 1rem;
-      color: white;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
+      line-height: 1.6;
+      margin: 1rem 0;
+      text-align: justify;
     }
 
-    .btn-edit {
-      background-color: #1976D2; /* Blue */
+
+    /* Комментарии */
+    .comments-section {
+      word-wrap: break-word; /* Принудительный перенос длинных слов */
+      overflow-wrap: break-word; /* Альтернативный способ для переноса текста */
+      max-width: 100%; /* Убедимся, что карточка не расширяется за пределы */
+      width: 90%; /* Совпадает с шириной поста .post-container */
+      max-width: 800px; /* Совпадает с максимальной шириной поста */
+      margin: 30px auto; /* Центрирование и отступ */
+      padding: 1.5rem;
+      background: #f4f7fc;
+      color: #333;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-edit:hover {
-      background-color: #1565C0;
+    .comments-section h2 {
+      font-size: 1.8rem;
+      color: #4e54c8;
+      margin-bottom: 1.5rem;
     }
 
-    .btn-delete {
-      background-color: #D32F2F; /* Red */
-    }
-
-    .btn-delete:hover {
-      background-color: #B71C1C;
-    }
-
-    /* Comments Section */
-    h2 {
-      margin: 2rem auto;
-      text-align: center;
-      color: #1976D2;
-    }
-
-    ul {
+    .comments-list {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
-    ul li {
-      background: white;
-      margin: 0.5rem auto;
+    .comments-list li {
+      background: #fff;
       padding: 1rem;
-      max-width: 800px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 
-    ul li p {
+    .comments-list li p {
       margin: 0.5rem 0;
     }
 
-    form textarea {
-      width: 100%;
-      max-width: 800px;
-      margin: 1rem auto;
-      display: block;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      padding: 0.5rem;
-      font-size: 1rem;
+    .comments-list li p strong {
+      color: #4e54c8;
     }
 
-    form button {
-      display: block;
-      margin: 1rem auto;
-      padding: 0.5rem 1rem;
-      background-color: #1976D2;
-      color: white;
-      border: none;
-      border-radius: 5px;
+    .not-logged-in {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .not-logged-in p {
+      color: #333;
+    }
+
+    .not-logged-in a {
+      color: #4e54c8;
+      text-decoration: none;
+    }
+
+    .not-logged-in a:hover {
+      color: #6c70f1;
+    }
+
+    /* Анимация */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .comments-section form {
+
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      width: 98%; /* На всю ширину экрана */
+      padding: 1rem;
+      background-color: #4e54c8; /* Красивый градиент или однотонный фон */
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* Лёгкая тень для формы */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* Текстовое поле */
+    form textarea {
+      flex: 1; /* Занимает максимум доступного пространства */
+      resize: none; /* Убираем возможность изменения размера */
+      padding: 0.8rem;
       font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      outline: none;
+    }
+
+    article {
+      background: linear-gradient(to bottom, #4e54c8, #6c70f1);
+      color: #fff;
+      border-radius: 15px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      position: relative;
+      animation: fadeIn 0.5s ease-in-out;
+      word-wrap: break-word; /* Принудительный перенос длинных слов */
+      overflow-wrap: break-word; /* Альтернативный способ для переноса текста */
+      max-width: 100%; /* Убедимся, что карточка не расширяется за пределы */
+    }
+
+    article h2 a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    article h2 a:hover {
+      text-decoration: underline;
+    }
+
+    article p {
+      margin: 0.5rem 0;
+      line-height: 1.6; /* Увеличенный интервал для лучшей читаемости */
+    }
+
+    article p strong {
+      color: #f1f1f1;
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: space-between; /* Автор слева, кнопки справа */
+      align-items: center; /* Выравниваем элементы по вертикали */
+      margin-top: 1rem; /* Отступ между текстом поста и метаинформацией */
+    }
+
+    /* Текст автора */
+    .post-meta p {
+      margin: 0; /* Убираем лишние отступы */
+      font-size: 1rem;
+      color: #f1f1f1;
+    }
+    /* Контейнер кнопок */
+    .buttons {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem; /* Расстояние между кнопками */
+      margin-top: 1rem;
+    }
+
+    /* Кнопки */
+    form button {
+      padding: 0.7rem;
+      background: #3b3e9a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background 0.3s ease-in-out, transform 0.2s;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      width: 100px; /* Устанавливаем одинаковую ширину */
+      text-align: center; /* Текст по центру кнопки */
     }
 
     form button:hover {
-      background-color: #1565C0;
+      background: #6c70f1;
+      transform: scale(1.05);
     }
 
-    /* Responsive Design */
-    @media (max-width: 600px) {
-      nav ul li {
-        margin: 0 0.5rem;
-      }
+    form button:active {
+      transform: scale(1);
+    }
 
-      article.post {
-        padding: 1rem;
+    /* Анимация */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
       }
-
-      form textarea {
-        width: 90%;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   </style>
 </head>
 <body>
-
+<!-- Навигация -->
 <nav>
   <ul>
     <li><a href="/">Home</a></li>
@@ -185,53 +306,90 @@
   </ul>
 </nav>
 
-<article class="post">
-  <div class="info">
-    <span><%= post.createdAt.toLocaleDateString() || 'No date' %></span>
-    <span><%= post.author %></span>
+<!-- Контейнер поста -->
+<div class="post-container">
+
+  <div class="post-meta">
+    <h2><%= post.title %></h2>
+    <p><%= post.createdAt.toLocaleTimeString('eu-EU', { hour: '2-digit', minute: '2-digit'}) %>,      <%= post.createdAt.toLocaleDateString() %></p>
   </div>
-  <h1><%= post.title %></h1>
   <p><%= post.text %></p>
-  <a href="/edit/<%= post.id %>" class="btn-edit">
-    <i class="fas fa-edit"></i>
-  </a>
-  <button class="btn-delete" data-id="<%= post.id %>">
-    <i class="fas fa-trash-alt" data-id="<%= post.id %>"></i>
-  </button>
-</article>
 
-<h2>Comments</h2>
+  <!-- Meta данные: автор и кнопки -->
+  <div class="post-meta">
+    <!-- Отображение автора -->
+    <p><strong>Author:</strong> <%= post.author %></p>
 
-<ul>
-  <% post.comments.forEach(comment => { %>
-    <li>
-      <p><strong><%= comment.author %>:</strong> <%= comment.text %></p>
-      <p><small>Posted on: <%= comment.createdAt.toLocaleString() %></small></p>
-    </li>
-  <% }) %>
-</ul>
+    <% if (post.author === username) { %>
+      <!-- Блок с кнопками -->
+      <div class="buttons">
+        <form action="/edit/<%= post._id %>" method="GET">
+          <button type="submit">Edit</button>
+        </form>
+        <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+          <button type="submit">Delete</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+</div>
 
-<% if (username) { %>
-  <!-- Show comment form only if the user is logged in -->
-  <form action="/posts/<%= post._id %>/comments" method="POST">
-    <textarea name="text" rows="3" cols="40" placeholder="Leave a comment..." required></textarea>
-    <button type="submit">Submit</button>
-  </form>
-<% } else { %>
-  <p>You must <a href="/login">log in</a> to add a comment.</p>
-<% } %>
+<!-- Секция с комментариями -->
+<section class="comments-section">
+  <h2>Comments</h2>
+  <ul class="comments-list">
+    <% post.comments.forEach(comment => { %>
+      <li>
+        <p><strong><%= comment.author %>:</strong> <%= comment.text %></p>
+        <p><small><%= post.createdAt.toLocaleTimeString('eu-EU', { hour: '2-digit', minute: '2-digit'}) %>,      <%= post.createdAt.toLocaleDateString() %></small></p>
+      </li>
+    <% }) %>
+  </ul>
 
+  <% if (username) { %>
+    <!-- Форма добавления комментария -->
+    <form action="/posts/<%= post._id %>/comments" method="POST">
+      <textarea name="text" rows="3" placeholder="Leave a comment..." required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  <% } else { %>
+    <div class="not-logged-in">
+      <p>You must <a href="/login">log in</a> to comment.</p>
+    </div>
+  <% } %>
+</section>
 
 <script>
-  document.addEventListener('click', (e) => {
-    const id = e.target?.dataset?.id || null;
-    if (id) {
-      fetch(`/posts/${id}`, {
-        method: 'DELETE',
-      }).then(() => {
-        window.location.href = '/posts';
-      });
-    }
+  // Функция для обновления высоты поля
+  function autoResizeField(field) {
+    field.style.height = 'auto'; // Сбрасываем текущую высоту
+    field.style.height = field.scrollHeight + 'px'; // Устанавливаем высоту, основанную на содержимом
+  }
+
+  // Отслеживание действий на текстовых полях
+  document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.querySelectorAll('textarea, input[type="text"]');
+
+    // Перебираем все текстовые области и применяем автоизменение
+    elements.forEach((field) => {
+      // Сразу пересчитываем высоту при загрузке (если данные уже есть)
+      autoResizeField(field);
+
+      // Изменяем высоту при вводе текста
+      field.addEventListener('input', () => autoResizeField(field));
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const resizableFields = document.querySelectorAll('textarea'); // Выбираем все текстовые области
+
+    resizableFields.forEach((field) => {
+      // Изначальная корректировка высоты (если данные уже есть в полях)
+      autoResizeField(field);
+
+      // Изменение высоты при вводе текста
+      field.addEventListener('input', () => autoResizeField(field));
+    });
   });
 </script>
 </body>

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const morgan = require('morgan');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
@@ -91,7 +90,6 @@ app.use(session({
 
 app.use(express.urlencoded({ extended: false }));
 
-// app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use(express.static('styles'));
 app.use('/protected-styles', authMiddleware, express.static('styles'));
@@ -102,7 +100,6 @@ app.get('/register', (req, res) => {
     const title = 'Register';
     res.render(createPath('register'), { title });
 });
-
 // Handle registration form submission
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
@@ -118,10 +115,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.get('/about-us', (req, res) => {
-        res.redirect("/contacts")
-    }
-)
+
 // Show the login form
 app.get('/login', (req, res) => {
     const title = 'Login';
@@ -153,6 +147,16 @@ app.post('/login', async (req, res) => {
 //     res.render(createPath('index'), { title });
 // });
 
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/');
+    });
+});
+
+
+
+
+
 
 app.get('/', authMiddleware, (req, res) => {
     const title = 'Home';
@@ -161,16 +165,32 @@ app.get('/', authMiddleware, (req, res) => {
 });
 
 
-app.get('/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('/');
-    });
-});
 
+
+
+app.get('/about-us', (req, res) => {
+    res.redirect("/contacts")
+});
 app.get('/contacts', (req, res) => {
     const title = 'Contacts';
     Contact.find()
         .then(contacts => res.render(createPath('contacts'), { contacts, title }))
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), { title: 'Error' });
+        });
+});
+
+
+app.get('/posts', (req, res) => {
+    const title = 'Posts';
+    const username = req.session.username; // Get the username of the logged-in user
+
+    Post.find()
+        .sort({ createdAt: -1 }) // Sort posts (latest first)
+        .then(posts => {
+            res.render(createPath('posts'), { posts, title, username }); // Pass username to EJS view
+        })
         .catch((error) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
@@ -188,6 +208,31 @@ router.get('/posts/:id', async (req, res) => {
     } catch (error) {
         res.status(500).send('Server error');
     }
+});
+app.get('/posts/:id', (req, res) => {
+    const title = 'Post';
+
+    Post.findById(req.params.id)
+        .then(post => {
+            if (!post) {
+                return res.status(404).render(createPath('error'), { title: 'Error', message: 'Post not found' });
+            }
+
+            // Render the post with its comments
+            res.render(createPath('post'), { post, title, username: req.session.username });
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).render(createPath('error'), { title: 'Error', message: 'Server error occurred' });
+        });
+});
+app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
+    Post.findByIdAndDelete(req.params.id)
+        .then(() => res.redirect(`/posts/`)) // Respond with 200 on success
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), { title: 'Error' });
+        });
 });
 
 // Route to add a comment
@@ -210,25 +255,6 @@ router.post('/posts/:id/comments', isAuthenticated, async (req, res) => {
         res.status(500).send('Server error');
     }
 });
-
-app.get('/posts/:id', (req, res) => {
-    const title = 'Post';
-
-    Post.findById(req.params.id)
-        .then(post => {
-            if (!post) {
-                return res.status(404).render(createPath('error'), { title: 'Error', message: 'Post not found' });
-            }
-
-            // Render the post with its comments
-            res.render(createPath('post'), { post, title, username: req.session.username });
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).render(createPath('error'), { title: 'Error', message: 'Server error occurred' });
-        });
-});
-
 app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
     try {
         const { text } = req.body;
@@ -255,14 +281,6 @@ app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
 });
 
 // DELETE route to delete a post
-app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
-    Post.findByIdAndDelete(req.params.id)
-        .then(() => res.sendStatus(200)) // Respond with 200 on success
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
-        });
-});
 
 // GET route to render the Edit Post form
 app.get('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
@@ -275,9 +293,6 @@ app.get('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
             res.render(createPath('error'), { title: 'Error' });
         });
 });
-
-
-// PUT route to update a post
 app.put('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
     const { title, text } = req.body; // Only update title and text
     const { id } = req.params;
@@ -290,25 +305,10 @@ app.put('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
         });
 });
 
-app.get('/posts', (req, res) => {
-    const title = 'Posts';
-    const username = req.session.username; // Get the username of the logged-in user
-
-    Post.find()
-        .sort({ createdAt: -1 }) // Sort posts (latest first)
-        .then(posts => {
-            res.render(createPath('posts'), { posts, title, username }); // Pass username to EJS view
-        })
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
-        });
-});
 app.get('/add-post', (req, res) => {
     const title = 'Add Post';
     res.render(createPath('add-post'), { title });
 });
-
 app.post('/add-post', authMiddleware, (req, res) => {
     const { title, text } = req.body; // Only take title and text from the form
     const author = req.session.username; // Get the currently logged-in user's username

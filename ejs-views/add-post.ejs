@@ -6,110 +6,156 @@
   <title>FMS <%= title %></title>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
+
   <style>
-    /* General Styles */
+    /* Общие настройки */
     body {
-      font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
-      color: #333;
+      font-family: 'Montserrat', sans-serif;
+      box-sizing: border-box;
+      background: #fff; /* Белый фон */
+      color: #333; /* Основной цвет текста */
+      min-height: 100vh;
+      display: flex;
+      justify-content: center; /* Центровка по горизонтали */
+      align-items: center; /* Центровка по вертикали */
     }
 
-    /* Navigation Styles */
+    /* Навигационный бар */
     nav {
-      background-color: #1976D2; /* Blue color */
-      padding: 1rem;
+      width: 100%;
+      background: linear-gradient(to bottom, #4e54c8, #3b3e9a); /* Градиентный фон навигации */
+      padding: 1rem 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Тень под навигацией */
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
     }
 
     nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
       display: flex;
       justify-content: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
 
     nav ul li {
-      margin: 0 1.5rem;
+      margin: 0 15px;
     }
 
     nav ul li a {
-      color: white;
       text-decoration: none;
+      color: #fff; /* Белый текст для контраста с градиентом */
       font-weight: bold;
-      font-size: 1.2rem;
-      transition: color 0.3s ease-in-out;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      transition: background-color 0.3s, transform 0.2s;
     }
 
     nav ul li a:hover {
-      color: #000; /* Black hover effect */
+      background: #6c70f1; /* Более светлый оттенок при наведении */
+      transform: scale(1.1); /* Лёгкое увеличение */
     }
 
-    /* Add Post Page Styles */
-    h1 {
-      text-align: center;
-      margin-top: 2rem;
-      color: #1976D2; /* Blue header color */
-      font-size: 2.5rem;
-      font-weight: bold;
-    }
-
-    /* Form Styles */
-    form {
-      max-width: 600px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    form label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-      color: #333;
-    }
-
-    form input[type="text"],
-    form textarea {
-      width: 94.5%;
-      padding: 1rem;
-      resize: none;
-      margin-bottom: 1.5rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-      transition: border-color 0.3s ease-in-out;
-    }
-
-    form input[type="text"]:focus,
-    form textarea:focus {
-      border-color: #1976D2; /* Blue border on focus */
-      outline: none;
-
-    }
-
-    /* Button Styles */
-    form button {
+    /* Контейнер страницы */
+    .page-container {
       width: 100%;
-      padding: 1rem;
-      background-color: #1976D2; /* Blue button color */
-      color: white;
-      border: none;
-      border-radius: 6px;
+      max-width: 600px;
+      background: linear-gradient(to bottom, #4e54c8, #6c70f1); /* Градиентный фон */
+      border-radius: 15px;
+      color: #fff; /* Белый текст */
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); /* Тень для выделения */
+      padding: 2rem;
+      animation: fadeIn 0.5s ease-in-out; /* Плавное появление контейнера */
+      text-align: center;
+      margin-top: 80px; /* Сместить контейнер ниже навигации */
+    }
+
+    /* Заголовок */
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #fff;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Мягкая тень текста */
+    }
+
+    /* Форма */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    label {
       font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый */
+      text-align: left;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 96%;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 8px;
+      margin-top: 0.2rem;
+      font-size: 1rem;
+      outline: none;
+      color: #333;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Лёгкая внутренняя тень */
+    }
+
+    textarea {
+      resize: none; /* Убирает возможность изменять размер текстовой области */
+      height: 100px;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.8); /* Подсветка при фокусе */
+    }
+
+    /* Кнопка */
+    button {
+      padding: 0.7rem 1.4rem;
+      border: none;
+      border-radius: 8px;
+      background: #3b3e9a; /* Тёмный фиолетовый */
+      color: #fff;
+      font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
-      transition: background-color 0.3s ease-in-out;
+      transition: background 0.3s ease-in-out, transform 0.2s;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Тень для кнопки */
     }
 
-    form button:hover {
-      background-color: #1565C0; /* Darker blue on hover */
+    button:hover {
+      background: #6c70f1; /* Светлый оттенок */
+      transform: scale(1.05); /* Лёгкое увеличение */
     }
 
+    button:active {
+      transform: scale(1); /* Возврат в исходное состояние */
+    }
+
+    /* Анимация появления */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
+
 </head>
 
 <body>
@@ -121,13 +167,54 @@
     <li><a href="/contacts">Contacts</a></li>
   </ul>
 </nav>
-<h1>Add Post</h1>
-<form action="/add-post" method="POST">
-  <label for="title">Title:</label>
-  <input type="text" id="title" name="title" required>
-  <label for="text">Content:</label>
-  <textarea id="text" name="text" style="height: 100px" required></textarea>
-  <button type="submit">Add Post</button>
-</form>
+
+<div class="page-container">
+  <h1>Add Post</h1>
+  <form action="/add-post" method="POST">
+    <label for="title">Title:</label>
+    <div class="auto-resize" id="title-container">
+      <input type="text" id="title" name="title" placeholder="Enter your title" required>
+    </div>
+    <label for="text">Content:</label>
+    <textarea id="text" name="text" required></textarea>
+
+    <button type="submit">Add Post</button>
+  </form>
+</div>
+
+<script>
+  // Функция для обновления высоты поля
+  function autoResizeField(field) {
+    field.style.height = 'auto'; // Сбрасываем текущую высоту
+    field.style.height = field.scrollHeight + 'px'; // Устанавливаем высоту, основанную на содержимом
+  }
+
+  // Отслеживание действий на текстовых полях
+  document.addEventListener('DOMContentLoaded', () => {
+    const elements = document.querySelectorAll('textarea, input[type="text"]');
+
+    // Перебираем все текстовые области и применяем автоизменение
+    elements.forEach((field) => {
+      // Сразу пересчитываем высоту при загрузке (если данные уже есть)
+      autoResizeField(field);
+
+      // Изменяем высоту при вводе текста
+      field.addEventListener('input', () => autoResizeField(field));
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const resizableFields = document.querySelectorAll('textarea'); // Выбираем все текстовые области
+
+    resizableFields.forEach((field) => {
+      // Изначальная корректировка высоты (если данные уже есть в полях)
+      autoResizeField(field);
+
+      // Изменение высоты при вводе текста
+      field.addEventListener('input', () => autoResizeField(field));
+    });
+  });
+</script>
+
 </body>
 </html>

@@ -3,109 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <title>FMS <%= title %></title>
+    <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <style>
-        /* General Styles */
+        /* Общие настройки */
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        /* Navigation Styles */
-        nav {
-            background-color: #1976D2; /* Blue color */
-            padding: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+            background: linear-gradient(to bottom, #4e54c8, #8f94fb); /* Градиентный фон */
+            color: #333; /* Основной цвет текста */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
+            display: none; /* Навигацию скрываем на странице регистрации */
         }
 
-        nav ul li {
-            margin: 0 1.5rem;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2rem;
-            transition: color 0.3s ease-in-out;
-        }
-
-        nav ul li a:hover {
-            color: #000; /* Black hover effect */
-        }
-
-        /* Register Page Styles */
-        h1 {
-            text-align: center;
-            margin-top: 2rem;
-            color: #1976D2; /* Blue header color */
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
-
-        /* Form Styles */
-        form {
-            max-width: 400px;
-            margin: 3rem auto;
+        /* Контейнер для формы */
+        .container {
+            background: #fff;
+            border-radius: 15px;
             padding: 2rem;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); /* Лёгкие тени */
+            text-align: center; /* Центровка содержимого */
+            animation: fadeIn 0.5s ease-in-out; /* Анимация плавного появления */
         }
 
-        form label {
-            display: block;
+        /* Заголовок страницы */
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #4e54c8; /* Цвет заголовка */
+        }
+
+        /* Поля формы */
+        label {
             font-weight: bold;
             margin-bottom: 0.5rem;
-            color: #333;
+            display: block;
+            text-align: left;
         }
 
-        form input[type="text"],
-        form input[type="password"] {
-            width: 91.5%;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease-in-out;
+        input[type="text"],
+        input[type="password"] {
+            width: 92%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            margin-bottom: 1rem;
+            font-size: 16px;
+            color: #555;
+            transition: border-color 0.3s;
         }
 
-        form input[type="text"]:focus,
-        form input[type="password"]:focus {
-            border-color: #1976D2; /* Blue border on focus */
+        input[type="text"]:focus,
+        input[type="password"]:focus {
             outline: none;
+            border-color: #4e54c8; /* Цвет подсветки фокуса */
+            box-shadow: 0 0 5px rgba(78, 84, 200, 0.5); /* Лёгкая теневая подсветка */
         }
 
-        /* Button Styles */
-        form button {
+        /* Кнопка */
+        button {
             width: 100%;
-            padding: 1rem;
-            background-color: #1976D2; /* Blue button color */
+            background: #4e54c8;
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 1.1rem;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s ease-in-out;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
-        form button:hover {
-            background-color: #1565C0; /* Darker blue on hover */
+        button:hover {
+            background: #6c70f1;
+            transform: scale(1.03); /* Лёгкое увеличение при наведении */
         }
 
+        button:active {
+            transform: scale(1); /* Возврат к исходным размерам */
+        }
+
+        /* Секция "уже есть аккаунт?" */
+        .options {
+            margin-top: 1rem;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .options a {
+            color: #4e54c8;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .options a:hover {
+            color: #6c70f1; /* Изменение цвета ссылки при наведении */
+        }
+
+        /* Анимация появления контейнера */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 
@@ -120,13 +137,19 @@
     </ul>
 </nav>
 
-<h1>Register</h1>
-<form action="/register" method="POST">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    <button type="submit">Register</button>
-</form>
+<div class="container">
+    <h1>Register</h1>
+    <form action="/register" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="options">
+        <p>Have an account? <a href="/login">Log in here</a>.</p>
+    </div>
+</div>
 </body>
 </html>

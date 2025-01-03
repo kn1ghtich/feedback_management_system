@@ -5,98 +5,127 @@
     <meta charset="UTF-8">
     <title>FMS <%= title %></title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <style>
+        /* Общий стиль для всех страниц */
         body {
-            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
-            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+            background: #fff; /* Белый фон */
+            color: #333; /* Основной цвет текста */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center; /* Центровка по горизонтали */
+            align-items: center; /* Центровка по вертикали */
         }
 
-        /* Navigation Bar */
+        /* Навигационный бар */
         nav {
-            background-color: #1976D2; /* Blue */
-            padding: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            background: linear-gradient(to bottom, #4e54c8, #3b3e9a); /* Градиентный фон навигации */
+            padding: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Тень под навигацией */
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
         }
 
         nav ul {
-            list-style: none;
             display: flex;
             justify-content: center;
-            margin: 0;
+            list-style: none;
             padding: 0;
+            margin: 0;
         }
 
         nav ul li {
-            margin: 0 1.5rem;
+            margin: 0 15px;
         }
 
         nav ul li a {
-            color: white;
             text-decoration: none;
+            color: #fff; /* Белый текст для контраста с градиентом */
             font-weight: bold;
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         nav ul li a:hover {
-            color: #000; /* Black on hover */
+            background: #6c70f1; /* Более светлый оттенок при наведении */
+            transform: scale(1.1); /* Лёгкое увеличение */
         }
 
-        /* Authentication Links */
-        a {
-            color: #1976D2; /* Blue */
-            text-decoration: none;
-            font-weight: bold;
-            margin: 0 0.5rem;
-            transition: color 0.3s ease;
+        /* Основной контейнер страницы */
+        .page-container {
+            width: 100%;
+            max-width: 400px;
+            background: linear-gradient(to bottom, #4e54c8, #6c70f1); /* Градиентный фон */
+            border-radius: 15px;
+            color: #fff; /* Белый текст */
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); /* Тень для выделения */
+            padding: 2rem;
+            animation: fadeIn 0.5s ease-in-out; /* Плавное появление контейнера */
+            text-align: center;
         }
 
-        a:hover {
-            color: #1565C0; /* Darker Blue */
+        /* Заголовки */
+        h1, h2 {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Мягкая тень для надписей */
         }
 
-        /* Logged-in Status */
+        /* Текстовые элементы */
         p {
             font-size: 1.2rem;
-            margin: 1.5rem 0;
-            color: #555;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9); /* Лёгкий контраст */
         }
 
-        /* Buttons */
-        a.btn {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background-color: #1976D2; /* Blue */
-            color: white;
-            border-radius: 6px;
-            font-size: 1rem;
+        /* Действия на странице (ссылки/кнопки) */
+        .action {
             text-decoration: none;
+            color: #fff;
+            background: #3b3e9a; /* Тёмный фиолетовый */
+            padding: 0.7rem 1.4rem;
             margin: 0.5rem;
-            transition: background-color 0.3s ease;
+            border-radius: 15px;
+            display: inline-block;
+            font-weight: bold;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease;
         }
 
-        a.btn:hover {
-            background-color: #1565C0; /* Darker Blue */
+        .action:hover {
+            background: #6c70f1; /* Более светлый оттенок */
+            transform: scale(1.05);
         }
 
-        /* Responsive Design */
-        @media (max-width: 600px) {
-            nav ul li {
-                margin: 0 0.5rem;
-            }
+        /* Подсказки/отсутствие данных */
+        .no-data {
+            text-align: center;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8); /* Лёгкий белый тон */
+            margin-top: 1rem;
+        }
 
-            p {
-                font-size: 1rem;
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
             }
-
-            a.btn {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.9rem;
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
@@ -113,12 +142,16 @@
     </ul>
 </nav>
 
-<% if (username) { %>
-    <p>Logged in as: <%= username %></p>
-    <a href="/logout">Logout</a>
-<% } else { %>
-    <a href="/login">Login</a> | <a href="/register">Register</a>
-<% } %>
+<div class="page-container">
+    <h1>Welcome to FMS!</h1>
+    <% if (username) { %>
+        <p>Logged in as: <%= username %></p>
+        <a href="/logout" class="action">Logout</a>
+    <% } else { %>
+        <a href="/login" class="action">Login</a>
+        <a href="/register" class="action">Register</a>
+    <% } %>
+</div>
 </body>
 </html>
 

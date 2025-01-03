@@ -6,98 +6,140 @@
     <title>FMS <%= title %></title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
+
 
     <style>
-        /* General Styles */
+        /* Общие настройки */
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
+            background: #fff; /* Белый фон */
+            color: #333; /* Основной цвет текста */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center; /* Центровка по горизонтали */
+            align-items: center; /* Центровка по вертикали */
         }
 
-        /* Navigation Styles */
+        /* Навигационный бар */
         nav {
-            background-color: #1976D2; /* Blue color */
-            padding: 1rem;
+            width: 100%;
+            background: linear-gradient(to bottom, #4e54c8, #3b3e9a); /* Градиентный фон навигации */
+            padding: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Тень под навигацией */
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
         }
 
         nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
         nav ul li {
-            margin: 0 1.5rem;
+            margin: 0 15px;
         }
 
         nav ul li a {
-            color: white;
             text-decoration: none;
+            color: #fff; /* Белый текст для контраста с градиентом */
             font-weight: bold;
-            font-size: 1.2rem;
-            transition: color 0.3s ease-in-out;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         nav ul li a:hover {
-            color: #000; /* Black hover effect */
+            background: #6c70f1; /* Более светлый оттенок при наведении */
+            transform: scale(1.1); /* Лёгкое увеличение */
         }
 
-        /* Contacts Page Styles */
-        h1 {
+        /* Контейнер списка контактов */
+        .contacts-container {
+            width: 100%;
+            max-width: 800px;
+            background: linear-gradient(to bottom, #4e54c8, #6c70f1); /* Градиентный фон */
+            border-radius: 15px;
+            color: #fff; /* Белый текст */
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); /* Тень для выделения */
+            padding: 2rem;
+            animation: fadeIn 0.5s ease-in-out; /* Плавное появление контейнера */
+        }
+
+        /* Заголовок внутри списка */
+        .contacts-container h2 {
+            font-size: 1.8rem;
+            color: #fff;
             text-align: center;
-            margin-top: 2rem;
-            color: #1976D2; /* Blue header color */
-            font-size: 2.5rem;
-            font-weight: bold;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Мягкая тень для надписи */
         }
 
-        .contacts {
+        /* Список контактов */
+        ul.contacts {
             list-style: none;
-            margin: 0;
             padding: 0;
+            margin: 0;
+        }
+
+        ul.contacts li {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 3rem;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Белые разделители с прозрачностью */
+            transition: background-color 0.3s;
         }
 
-        .contacts li {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            flex: 1 1 200px; /* Flex-grow, Flex-shrink, и минимальная ширина */
-            max-width: 200px; /* Ограничение максимальной ширины */
+        ul.contacts li:last-child {
+            border-bottom: none; /* Убираем нижнюю границу у последнего элемента */
         }
 
-        .contacts li a {
+        ul.contacts li:hover {
+            background: rgba(255, 255, 255, 0.1); /* Лёгкий белый фон при наведении */
+        }
+
+        ul.contacts li a {
             text-decoration: none;
-            color: #1976D2;
+            color: #fff; /* Белый текст ссылок */
             font-weight: bold;
-            font-size: 1.2rem;
-            display: block;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+
+        ul.contacts li a:hover {
+            color: #c3c8ff; /* Светло-голубой цвет при наведении */
+        }
+
+        /* Окно "контактов нет" */
+        .no-contacts {
             text-align: center;
-            transition: color 0.3s ease-in-out;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8); /* Полупрозрачный белый цвет */
+            margin-top: 1rem;
         }
 
-        .contacts li:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        /* Анимация появления контейнера */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-
-        .contacts li a:hover {
-            color: #000; /* Black on hover */
-        }
-
     </style>
-
 </head>
 
 <body>
@@ -111,15 +153,17 @@
     </ul>
 </nav>
 
-<h1>Contacts:</h1>
-<ul class="contacts">
-    <% if (contacts.length) { %>
-        <% contacts.forEach(({ link, name }) => { %>
-            <li>
-                <a href="<%= link %>" target="_blank"><%= name %></a>
-            </li>
-        <% }) %>
-    <% } %>
-</ul>
+<div class="contacts-container">
+    <h2>Contacts: </h2>
+    <ul class="contacts">
+        <% if (contacts.length) { %>
+            <% contacts.forEach(({ link, name }) => { %>
+                <li>
+                    <a href="<%= link %>" target="_blank"><%= name %></a>
+                </li>
+            <% }) %>
+        <% } %>
+    </ul>
+</div>
 </body>
 </html>

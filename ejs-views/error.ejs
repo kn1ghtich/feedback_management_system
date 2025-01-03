@@ -6,57 +6,82 @@
     <title>FMS <%= title %></title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
+
     <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
+        /* Общие стили */
+
+        body.error {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            box-sizing: border-box;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        /* Error Page Styles */
-        .error {
+            flex-direction: column; /* Расположение элементов вертикально */
+            justify-content: center; /* Выравнивание по вертикали */
+            align-items: center; /* Выравнивание по горизонтали */
+            height: 100vh; /* Занять весь экран */
+            background: linear-gradient(to bottom, #4e54c8, #3b3e9a); /* Градиентный фон */
+            color: #fff;
             text-align: center;
         }
 
-        .error-code {
-            font-size: 8rem;
-            color: #1976D2; /* Blue */
+        /* Код ошибки (например, 404) */
+        h1.error-code {
+            font-size: 10rem; /* Очень крупный текст */
+            font-weight: bold;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); /* Лёгкая тень для эффекта */
             margin: 0;
-            font-weight: bold;
+            animation: fadeIn 1s ease-in-out; /* Анимация появления */
         }
 
-        p {
+        /* Описание ошибки */
+        body.error p {
             font-size: 1.5rem;
-            color: #555;
-            margin: 0.5rem 0 2rem;
+            line-height: 1.8;
+            margin: 1rem 0 0; /* Отступ только сверху */
+            color: #f1f1f1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Лёгкая тень */
+            animation: fadeIn 1.5s ease-in-out; /* Анимация появления */
         }
 
-        a {
+        /* Анимация появления */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .home-button {
             text-decoration: none;
-            color: #1976D2; /* Blue */
+            color: #fff;
+            background: #12144c; /* Тёмный фиолетовый */
+            padding: 0.7rem 1.4rem;
+            margin: 0.5rem;
+            border-radius: 15px;
+            display: inline-block;
             font-weight: bold;
-            font-size: 1.2rem;
-            padding: 0.5rem 1rem;
-            border: 2px solid #1976D2;
-            border-radius: 6px;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease;
         }
 
-        a:hover {
-            background-color: #1976D2; /* Blue */
-            color: white;
+        .home-button:hover {
+            background: #6c70f1;  /* Меняем градиент при наведении */
+            transform: scale(1.1); /* Увеличиваем кнопку */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Увеличиваем тень */
         }
     </style>
 </head>
 
 <body class="error">
+
 <h1 class="error-code">404</h1>
 <p>Something going wrong...</p>
+
+<a href="/" class="home-button">Go to Home</a>
 </body>
 </html>
