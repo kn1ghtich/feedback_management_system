@@ -344,6 +344,7 @@
   </ul>
 
   <%
+  // Проверяем, есть ли пользователь в списке авторов комментариев
   const userCommented = post.comments.some(comment => comment.author === username);
   %>
 
@@ -354,12 +355,10 @@
     </form>
   <% } else if (!username) { %>
     <div class="not-logged-in">
-      <p> You must <a href="/login">log in</a> to comment.</p>
+      <p>You must <a href="/login">log in</a> to comment.</p>
     </div>
   <% } else { %>
-    <div class="not-logged-in">
-      <p>You have already commented on this post.</p>
-    </div>
+    <p><em>You have already commented on this post.</em></p>
   <% } %>
 </section>
 
