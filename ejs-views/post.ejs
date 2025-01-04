@@ -343,14 +343,22 @@
     <% }) %>
   </ul>
 
-  <% if (username) { %>
+  <%
+  const userCommented = post.comments.some(comment => comment.author === username);
+  %>
+
+  <% if (username && !userCommented) { %>
     <form action="/posts/<%= post._id %>/comments" method="POST">
       <textarea name="text" rows="3" placeholder="Leave a comment..." required></textarea>
       <button type="submit">Submit</button>
     </form>
+  <% } else if (!username) { %>
+    <div class="not-logged-in">
+      <p> You must <a href="/login">log in</a> to comment.</p>
+    </div>
   <% } else { %>
     <div class="not-logged-in">
-      <p>You must <a href="/login">log in</a> to comment.</p>
+      <p>You have already commented on this post.</p>
     </div>
   <% } %>
 </section>
