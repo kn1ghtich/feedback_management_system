@@ -289,6 +289,7 @@ app.put('/edit/:id', authMiddleware, isAuthorMiddleware, upload.single('image'),
             postData.image = {
                 data: req.file.buffer,
                 contentType: req.file.mimetype,
+
             };
         }
 
@@ -299,6 +300,7 @@ app.put('/edit/:id', authMiddleware, isAuthorMiddleware, upload.single('image'),
         res.render(createPath('error'), { title: 'Error', message: 'Failed to update post' });
     }
 });
+
 app.get('/add-post', authMiddleware, (req, res) => {
     const title = 'Add Post';
     res.render(createPath('add-post'), { title });
