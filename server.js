@@ -38,6 +38,7 @@ const authMiddleware = (req, res, next) => {
         res.redirect('/login');
     }
 };
+
 function isAuthenticated(req, res, next) {
     if (req.session.user) {
         return next();
@@ -169,7 +170,6 @@ app.get('/posts', (req, res) => {
         });
 });
 
-
 app.get('/posts/:id', (req, res) => {
     const title = 'Post';
 
@@ -193,6 +193,7 @@ app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
             res.render(createPath('error'), { title: 'Error' });
         });
 });
+
 
 
 app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
@@ -240,7 +241,7 @@ app.put('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
         });
 });
 
-app.get('/add-post', (req, res) => {
+app.get('/add-post', authMiddleware, (req, res) => {
     const title = 'Add Post';
     res.render(createPath('add-post'), { title });
 });
@@ -250,7 +251,7 @@ app.post('/add-post', authMiddleware, (req, res) => {
 
     const post = new Post({ title, author, text }); // Assign the author from the session
     post.save()
-        .then(() => res.redirect('/posts')) 
+        .then(() => res.redirect('/posts'))
         .catch((error) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
