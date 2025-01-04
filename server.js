@@ -1,5 +1,4 @@
 const express = require('express');
-const router = express.Router();
 const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
@@ -39,7 +38,6 @@ const authMiddleware = (req, res, next) => {
         res.redirect('/login');
     }
 };
-
 function isAuthenticated(req, res, next) {
     if (req.session.user) {
         return next();
@@ -172,17 +170,6 @@ app.get('/posts', (req, res) => {
 });
 
 
-router.get('/posts/:id', async (req, res) => {
-    try {
-        const post = await Post.findById(req.params.id);
-        if (!post) {
-            return res.status(404).send('Post not found');
-        }
-        res.json(post);
-    } catch (error) {
-        res.status(500).send('Server error');
-    }
-});
 app.get('/posts/:id', (req, res) => {
     const title = 'Post';
 
@@ -208,25 +195,6 @@ app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
 });
 
 
-router.post('/posts/:id/comments', isAuthenticated, async (req, res) => {
-    try {
-        const { text } = req.body;
-        if (!text) {
-            return res.status(400).send('Comment text is required');
-        }
-
-        const post = await Post.findById(req.params.id);
-        if (!post) {
-            return res.status(404).send('Post not found');
-        }
-
-        post.comments.push({ text, author: req.session.user.username });
-        await post.save();
-        res.status(200).send('Comment added successfully');
-    } catch (error) {
-        res.status(500).send('Server error');
-    }
-});
 app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
     try {
         const { text } = req.body;
