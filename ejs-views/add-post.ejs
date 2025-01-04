@@ -9,26 +9,25 @@
   <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
 
   <style>
-    /* Общие настройки */
+
     body {
       margin: 0;
       padding: 0;
       font-family: 'Montserrat', sans-serif;
       box-sizing: border-box;
-      background: #fff; /* Белый фон */
-      color: #333; /* Основной цвет текста */
+      background: #fff;
+      color: #333;
       min-height: 100vh;
       display: flex;
-      justify-content: center; /* Центровка по горизонтали */
-      align-items: center; /* Центровка по вертикали */
+      justify-content: center;
+      align-items: center;
     }
 
-    /* Навигационный бар */
     nav {
       width: 100%;
-      background: linear-gradient(to bottom, #4e54c8, #3b3e9a); /* Градиентный фон навигации */
+      background: linear-gradient(to bottom, #4e54c8, #3b3e9a);
       padding: 1rem 0;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Тень под навигацией */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       position: fixed;
       top: 0;
       left: 0;
@@ -49,7 +48,7 @@
 
     nav ul li a {
       text-decoration: none;
-      color: #fff; /* Белый текст для контраста с градиентом */
+      color: #fff;
       font-weight: bold;
       font-size: 1.1rem;
       padding: 0.5rem 1rem;
@@ -58,33 +57,30 @@
     }
 
     nav ul li a:hover {
-      background: #6c70f1; /* Более светлый оттенок при наведении */
-      transform: scale(1.1); /* Лёгкое увеличение */
+      background: #6c70f1;
+      transform: scale(1.1);
     }
 
-    /* Контейнер страницы */
     .page-container {
       width: 100%;
       max-width: 600px;
-      background: linear-gradient(to bottom, #4e54c8, #6c70f1); /* Градиентный фон */
+      background: linear-gradient(to bottom, #4e54c8, #6c70f1);
       border-radius: 15px;
-      color: #fff; /* Белый текст */
-      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); /* Тень для выделения */
+      color: #fff;
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
       padding: 2rem;
-      animation: fadeIn 0.5s ease-in-out; /* Плавное появление контейнера */
+      animation: fadeIn 0.5s ease-in-out;
       text-align: center;
-      margin-top: 80px; /* Сместить контейнер ниже навигации */
+      margin-top: 80px;
     }
 
-    /* Заголовок */
     h1 {
       font-size: 2rem;
       margin-bottom: 1rem;
       color: #fff;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Мягкая тень текста */
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     }
 
-    /* Форма */
     form {
       display: flex;
       flex-direction: column;
@@ -93,7 +89,7 @@
 
     label {
       font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.9); /* Полупрозрачный белый */
+      color: rgba(255, 255, 255, 0.9);
       text-align: left;
     }
 
@@ -107,43 +103,41 @@
       font-size: 1rem;
       outline: none;
       color: #333;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Лёгкая внутренняя тень */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     textarea {
-      resize: none; /* Убирает возможность изменять размер текстовой области */
+      resize: none;
       height: 100px;
     }
 
     input[type="text"]:focus,
     textarea:focus {
-      box-shadow: 0 0 6px rgba(255, 255, 255, 0.8); /* Подсветка при фокусе */
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
     }
 
-    /* Кнопка */
     button {
       padding: 0.7rem 1.4rem;
       border: none;
       border-radius: 8px;
-      background: #3b3e9a; /* Тёмный фиолетовый */
+      background: #3b3e9a;
       color: #fff;
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s ease-in-out, transform 0.2s;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Тень для кнопки */
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     }
 
     button:hover {
-      background: #6c70f1; /* Светлый оттенок */
-      transform: scale(1.05); /* Лёгкое увеличение */
+      background: #6c70f1;
+      transform: scale(1.05);
     }
 
     button:active {
-      transform: scale(1); /* Возврат в исходное состояние */
+      transform: scale(1);
     }
 
-    /* Анимация появления */
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -183,34 +177,24 @@
 </div>
 
 <script>
-  // Функция для обновления высоты поля
   function autoResizeField(field) {
-    field.style.height = 'auto'; // Сбрасываем текущую высоту
-    field.style.height = field.scrollHeight + 'px'; // Устанавливаем высоту, основанную на содержимом
+    field.style.height = 'auto';
+    field.style.height = field.scrollHeight + 'px';
   }
 
-  // Отслеживание действий на текстовых полях
   document.addEventListener('DOMContentLoaded', () => {
     const elements = document.querySelectorAll('textarea, input[type="text"]');
-
-    // Перебираем все текстовые области и применяем автоизменение
     elements.forEach((field) => {
-      // Сразу пересчитываем высоту при загрузке (если данные уже есть)
       autoResizeField(field);
-
-      // Изменяем высоту при вводе текста
       field.addEventListener('input', () => autoResizeField(field));
     });
   });
 
   document.addEventListener('DOMContentLoaded', () => {
-    const resizableFields = document.querySelectorAll('textarea'); // Выбираем все текстовые области
+    const resizableFields = document.querySelectorAll('textarea');
 
     resizableFields.forEach((field) => {
-      // Изначальная корректировка высоты (если данные уже есть в полях)
       autoResizeField(field);
-
-      // Изменение высоты при вводе текста
       field.addEventListener('input', () => autoResizeField(field));
     });
   });

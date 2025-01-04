@@ -8,7 +8,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <style>
-        /* Общие стили */
         body {
             margin: 0;
             padding: 0;
@@ -20,7 +19,6 @@
 
         }
 
-        /* Центрированная навигация */
         nav {
             width: 100%;
             background: linear-gradient(to bottom, #4e54c8, #3b3e9a);
@@ -62,7 +60,6 @@
             transform: scale(1.1);
         }
 
-        /* Заголовок страницы */
         h1 {
             text-align: center;
             margin: 6rem 0 2rem;
@@ -72,7 +69,6 @@
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        /* Список постов */
         ul {
             list-style: none;
             padding: 0;
@@ -84,7 +80,6 @@
             margin-bottom: 2rem;
         }
 
-        /* Карточка поста */
         article {
             background: linear-gradient(to bottom, #4e54c8, #6c70f1);
             color: #fff;
@@ -93,9 +88,9 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             position: relative;
             animation: fadeIn 0.5s ease-in-out;
-            word-wrap: break-word; /* Принудительный перенос длинных слов */
-            overflow-wrap: break-word; /* Альтернативный способ для переноса текста */
-            max-width: 100%; /* Убедимся, что карточка не расширяется за пределы */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            max-width: 100%;
         }
 
         article h2 a {
@@ -112,7 +107,7 @@
 
         article p {
             margin: 0.5rem 0;
-            line-height: 1.6; /* Увеличенный интервал для лучшей читаемости */
+            line-height: 1.6;
         }
 
         article p strong {
@@ -121,27 +116,19 @@
 
         .post-meta {
             display: flex;
-            justify-content: space-between; /* Автор слева, кнопки справа */
-            align-items: center; /* Выравниваем элементы по вертикали */
-            margin-top: 1rem; /* Отступ между текстом поста и метаинформацией */
-        }
-
-        /* Текст автора */
-        .post-meta p {
-            margin: 0; /* Убираем лишние отступы */
-            font-size: 1rem;
-            color: #f1f1f1;
-        }
-        /* Контейнер кнопок */
-        .buttons {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem; /* Расстояние между кнопками */
+            justify-content: space-between;
+            align-items: center;
             margin-top: 1rem;
         }
 
-        /* Кнопки */
+        .post-meta p {
+            margin: 0;
+            font-size: 1rem;
+            color: #f1f1f1;
+        }
+
+
+
         form button {
             padding: 0.7rem;
             background: #3b3e9a;
@@ -166,7 +153,6 @@
             transform: scale(1);
         }
 
-        /* Анимация */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -178,7 +164,7 @@
             }
         }
         .page-container {
-            margin: auto; /* Automatically centers the container horizontally and vertically */
+            margin: auto;
             width: 100%;
             max-width: 400px;
             background: linear-gradient(to bottom, #4e54c8, #6c70f1);
@@ -188,26 +174,26 @@
             padding: 2rem;
             text-align: center;
 
-            /* Add extra margin at the top to prevent overlap with the fixed nav bar */
-            margin-top: calc(60px + 2rem); /* Adjust based on your nav height plus extra spacing */
+
+            margin-top: calc(60px + 2rem);
         }
 
         .page-container h1 {
             font-size: 1.8rem;
             color: #fff;
             margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Мягкая тень для надписей */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         }
         .page-container p {
             font-size: 1.2rem;
             margin-top: 1rem;
             margin-bottom: 2rem;
-            color: rgba(255, 255, 255, 0.9); /* Лёгкий контраст */
+            color: rgba(255, 255, 255, 0.9);
         }
         .action {
             text-decoration: none;
             color: #fff;
-            background: #3b3e9a; /* Тёмный фиолетовый */
+            background: #3b3e9a;
             padding: 0.7rem 1.4rem;
             margin: 0.5rem;
             border-radius: 15px;
@@ -217,7 +203,7 @@
         }
 
         .action:hover {
-            background: #6c70f1; /* Более светлый оттенок */
+            background: #6c70f1;
             transform: scale(1.05);
         }
     </style>
@@ -244,9 +230,9 @@
     <% } %>
 </div>
 
-<% if (username) { %> <!-- Check if user is logged in -->
+<% if (username) { %>
 <h1>All your posts</h1>
-<% if (posts.length > 0) { %> <!-- Check if posts exist -->
+<% if (posts.length > 0) { %>
 <ul>
     <% posts.forEach(post => { %>
         <li>
@@ -261,9 +247,8 @@
                         <%= post.text.length > 150 ? post.text.substring(0, 150) + '...' : post.text %>
                     </p>
 
-                    <!-- Meta данные: автор и кнопки -->
+
                     <div class="post-meta">
-                        <!-- Отображение автора -->
                         <p><strong>Author:</strong> <%= post.author %></p>
                         <p><%= post.createdAt.toLocaleDateString() %></p>
                     </div>
@@ -273,7 +258,6 @@
     <% }) %>
 </ul>
 <% } else { %>
-    <!-- Message when there are no posts -->
     <h2 style="text-align: center">You have no posts. Consider creating one!</h2>
 <% } %>
 <% } %>

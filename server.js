@@ -32,7 +32,6 @@ app.listen(PORT, (error) => {
     error ? console.log(error) : console.log(`listening port ${PORT}`);
 });
 
-// Middleware to check if user is logged in
 const authMiddleware = (req, res, next) => {
     if (req.session && req.session.username) {
         // User is authenticated
@@ -49,8 +48,6 @@ function isAuthenticated(req, res, next) {
     }
     return res.status(401).send('You need to log in to perform this action');
 }
-
-// Middleware to check if the logged-in user is the author of the post
 const isAuthorMiddleware = async (req, res, next) => {
     try {
         const { id } = req.params; // Post ID from the route
@@ -86,13 +83,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static('styles'));
 app.use('/protected-styles', authMiddleware, express.static('styles'));
 app.use(methodOverride('_method'));
-////////////////////////////////////////////
-// Show the registration form
+
 app.get('/register', (req, res) => {
     const title = 'Register';
     res.render(createPath('register'), { title });
 });
-// Handle registration form submission
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
@@ -106,8 +101,6 @@ app.post('/register', async (req, res) => {
         res.render(createPath('error'), { title: 'Error', message: 'Registration failed' });
     }
 });
-
-
 app.get('/login', (req, res) => {
     const title = 'Login';
     res.render(createPath('login'), { title });
@@ -137,40 +130,6 @@ app.get('/logout', (req, res) => {
 });
 
 
-
-
-
-
-// app.get('/', authMiddleware, (req, res) => {
-//     const title = 'Home';
-//     const username = req.session.username; // Get logged-in username
-//     res.render(createPath('index'), { title, username });
-// });
-// Index route
-
-// app.get('/', async  (req, res) => {
-//     try {
-//         const username = req.session.username; // Get the username from session (if logged in)
-//
-//         // Initialize an empty array for posts
-//         let userPosts = [];
-//
-//         // Fetch user-specific posts from the database if the user is logged in
-//         if (username) {
-//             userPosts = await Post.find({ author: username }).sort({ createdAt: -1 }); // Fetch all posts by the user
-//         }
-//
-//         // Render the `index.ejs` template with posts
-//         res.render(createPath('index'), {
-//             title: 'Home',       // Title for the page
-//             username,            // Pass the username
-//             posts: userPosts,    // Pass the array of posts (can be empty if user has no posts)
-//         });
-//     } catch (error) {
-//         console.error('Error fetching posts:', error);
-//         res.status(500).send('Server Error');
-//     }
-// });
 
 app.get('/', (req, res) => {
     const title = 'Home';
@@ -256,7 +215,7 @@ app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
         });
 });
 
-// Route to add a comment
+
 router.post('/posts/:id/comments', isAuthenticated, async (req, res) => {
     try {
         const { text } = req.body;
@@ -301,9 +260,6 @@ app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
     }
 });
 
-// DELETE route to delete a post
-
-// GET route to render the Edit Post form
 app.get('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
     const title = 'Edit Post';
 

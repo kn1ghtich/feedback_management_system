@@ -10,14 +10,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
     <style>
-        /* Общие настройки */
         body {
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
             box-sizing: border-box;
-            background: linear-gradient(to bottom, #4e54c8, #8f94fb); /* Градиентный фон */
-            color: #333; /* Основной цвет текста */
+            background: linear-gradient(to bottom, #4e54c8, #8f94fb);
+            color: #333;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,29 +24,29 @@
         }
 
         nav ul {
-            display: none; /* Навигацию можно скрыть для страницы логина */
+            display: none;
         }
 
-        /* Контейнер логина */
         .container {
+            position: relative;
             background: #fff;
             border-radius: 15px;
             padding: 2rem;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); /* Тени */
-            text-align: center; /* Центрируем текст */
-            animation: fadeIn 0.5s ease-in-out; /* Анимация появления */
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        /* Заголовок */
+
         h1 {
             font-size: 2rem;
             margin-bottom: 1.5rem;
-            color: #4e54c8; /* Цвет заголовка */
+            color: #4e54c8;
         }
 
-        /* Поля ввода */
+
         label {
             font-weight: bold;
             margin-bottom: 0.5rem;
@@ -70,11 +69,10 @@
         input[type="text"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #4e54c8; /* Цвет подсветки на фокусе */
-            box-shadow: 0 0 5px rgba(78, 84, 200, 0.5); /* Лёгкое свечение */
+            border-color: #4e54c8;
+            box-shadow: 0 0 5px rgba(78, 84, 200, 0.5);
         }
 
-        /* Кнопки */
         button {
             width: 100%;
             background: #4e54c8;
@@ -90,14 +88,13 @@
 
         button:hover {
             background: #6c70f1;
-            transform: scale(1.03); /* Лёгкое увеличение кнопки при наведении */
+            transform: scale(1.03);
         }
 
         button:active {
-            transform: scale(1); /* Возврат к исходным размерам при клике */
+            transform: scale(1);
         }
 
-        /* Секция с ссылкой на регистрацию */
         .options {
             margin-top: 1rem;
             font-size: 14px;
@@ -112,10 +109,9 @@
         }
 
         .options a:hover {
-            color: #6c70f1; /* Цвет ссылки при наведении */
+            color: #6c70f1;
         }
 
-        /* Анимация появления контейнера */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -126,7 +122,36 @@
                 transform: translateY(0);
             }
         }
+
+        .close-btn {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 40px;
+            height: 40px;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            line-height: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background-color: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .close-btn:active {
+            transform: scale(1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
     </style>
+
 </head>
 
 <body>
@@ -140,9 +165,11 @@
     </ul>
 </nav>
 
+
 <div class="container">
+    <a href="/" class="close-btn">&times;</a>
     <h1>Login</h1>
-    <form action="/login" method="POST"> <!-- This action submits the login form -->
+    <form action="/login" method="POST">
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -156,7 +183,6 @@
         </div>
     </form>
 
-    <!-- Options to Register or Stay on Login -->
     <div class="options">
         <p>Don't have an account? <a href="/register">Register here</a>.</p>
     </div>

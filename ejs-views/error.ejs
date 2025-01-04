@@ -9,43 +9,38 @@
     <link rel="icon" href="https://img.icons8.com/pulsar-color/48/anonymous-mask.png" alt="anonymous-mask" type="image/png">
 
     <style>
-        /* Общие стили */
-
         body.error {
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
             box-sizing: border-box;
             display: flex;
-            flex-direction: column; /* Расположение элементов вертикально */
-            justify-content: center; /* Выравнивание по вертикали */
-            align-items: center; /* Выравнивание по горизонтали */
-            height: 100vh; /* Занять весь экран */
-            background: linear-gradient(to bottom, #4e54c8, #3b3e9a); /* Градиентный фон */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to bottom, #4e54c8, #3b3e9a);
             color: #fff;
             text-align: center;
         }
 
-        /* Код ошибки (например, 404) */
         h1.error-code {
-            font-size: 10rem; /* Очень крупный текст */
+            font-size: 10rem;
             font-weight: bold;
-            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5); /* Лёгкая тень для эффекта */
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
             margin: 0;
-            animation: fadeIn 1s ease-in-out; /* Анимация появления */
+            animation: fadeIn 1s ease-in-out;
         }
 
-        /* Описание ошибки */
         body.error p {
             font-size: 1.5rem;
             line-height: 1.8;
-            margin: 1rem 0 0; /* Отступ только сверху */
+            margin: 1rem 0 0;
             color: #f1f1f1;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Лёгкая тень */
-            animation: fadeIn 1.5s ease-in-out; /* Анимация появления */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 1.5s ease-in-out;
         }
 
-        /* Анимация появления */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -60,7 +55,7 @@
         .home-button {
             text-decoration: none;
             color: #fff;
-            background: #12144c; /* Тёмный фиолетовый */
+            background: #12144c;
             padding: 0.7rem 1.4rem;
             margin: 0.5rem;
             border-radius: 15px;
@@ -70,9 +65,9 @@
         }
 
         .home-button:hover {
-            background: #6c70f1;  /* Меняем градиент при наведении */
-            transform: scale(1.1); /* Увеличиваем кнопку */
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Увеличиваем тень */
+            background: #6c70f1;
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>

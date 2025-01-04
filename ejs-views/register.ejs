@@ -7,14 +7,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <style>
-        /* Общие настройки */
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
             box-sizing: border-box;
             background: linear-gradient(to bottom, #4e54c8, #8f94fb); /* Градиентный фон */
-            color: #333; /* Основной цвет текста */
+            color: #333;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,29 +22,30 @@
         }
 
         nav ul {
-            display: none; /* Навигацию скрываем на странице регистрации */
+            display: none;
         }
 
-        /* Контейнер для формы */
+
         .container {
             background: #fff;
+            position: relative;
             border-radius: 15px;
             padding: 2rem;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15); /* Лёгкие тени */
-            text-align: center; /* Центровка содержимого */
-            animation: fadeIn 0.5s ease-in-out; /* Анимация плавного появления */
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
-        /* Заголовок страницы */
+
         h1 {
             font-size: 2rem;
             margin-bottom: 1.5rem;
-            color: #4e54c8; /* Цвет заголовка */
+            color: #4e54c8;
         }
 
-        /* Поля формы */
+
         label {
             font-weight: bold;
             margin-bottom: 0.5rem;
@@ -67,11 +68,11 @@
         input[type="text"]:focus,
         input[type="password"]:focus {
             outline: none;
-            border-color: #4e54c8; /* Цвет подсветки фокуса */
-            box-shadow: 0 0 5px rgba(78, 84, 200, 0.5); /* Лёгкая теневая подсветка */
+            border-color: #4e54c8;
+            box-shadow: 0 0 5px rgba(78, 84, 200, 0.5);
         }
 
-        /* Кнопка */
+
         button {
             width: 100%;
             background: #4e54c8;
@@ -87,14 +88,14 @@
 
         button:hover {
             background: #6c70f1;
-            transform: scale(1.03); /* Лёгкое увеличение при наведении */
+            transform: scale(1.03);
         }
 
         button:active {
-            transform: scale(1); /* Возврат к исходным размерам */
+            transform: scale(1);
         }
 
-        /* Секция "уже есть аккаунт?" */
+
         .options {
             margin-top: 1rem;
             font-size: 14px;
@@ -109,10 +110,10 @@
         }
 
         .options a:hover {
-            color: #6c70f1; /* Изменение цвета ссылки при наведении */
+            color: #6c70f1;
         }
 
-        /* Анимация появления контейнера */
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -122,6 +123,34 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 40px;
+            height: 40px;
+            background-color: #f44336;
+            color: white;
+            text-align: center;
+            line-height: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background-color: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .close-btn:active {
+            transform: scale(1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -138,6 +167,7 @@
 </nav>
 
 <div class="container">
+    <a href="/" class="close-btn">&times;</a>
     <h1>Register</h1>
     <form action="/register" method="POST">
         <label for="username">Username:</label>

@@ -295,8 +295,9 @@
     }
   </style>
 </head>
+
 <body>
-<!-- Навигация -->
+
 <nav>
   <ul>
     <li><a href="/">Home</a></li>
@@ -306,7 +307,6 @@
   </ul>
 </nav>
 
-<!-- Контейнер поста -->
 <div class="post-container">
 
   <div class="post-meta">
@@ -315,13 +315,10 @@
   </div>
   <p><%= post.text %></p>
 
-  <!-- Meta данные: автор и кнопки -->
   <div class="post-meta">
-    <!-- Отображение автора -->
     <p><strong>Author:</strong> <%= post.author %></p>
 
     <% if (post.author === username) { %>
-      <!-- Блок с кнопками -->
       <div class="buttons">
         <form action="/edit/<%= post._id %>" method="GET">
           <button type="submit">Edit</button>
@@ -334,7 +331,6 @@
   </div>
 </div>
 
-<!-- Секция с комментариями -->
 <section class="comments-section">
   <h2>Comments</h2>
   <ul class="comments-list">
@@ -348,7 +344,6 @@
   </ul>
 
   <% if (username) { %>
-    <!-- Форма добавления комментария -->
     <form action="/posts/<%= post._id %>/comments" method="POST">
       <textarea name="text" rows="3" placeholder="Leave a comment..." required></textarea>
       <button type="submit">Submit</button>
@@ -361,34 +356,26 @@
 </section>
 
 <script>
-  // Функция для обновления высоты поля
   function autoResizeField(field) {
-    field.style.height = 'auto'; // Сбрасываем текущую высоту
-    field.style.height = field.scrollHeight + 'px'; // Устанавливаем высоту, основанную на содержимом
+    field.style.height = 'auto';
+    field.style.height = field.scrollHeight + 'px';
   }
 
-  // Отслеживание действий на текстовых полях
+
   document.addEventListener('DOMContentLoaded', () => {
     const elements = document.querySelectorAll('textarea, input[type="text"]');
 
-    // Перебираем все текстовые области и применяем автоизменение
     elements.forEach((field) => {
-      // Сразу пересчитываем высоту при загрузке (если данные уже есть)
       autoResizeField(field);
-
-      // Изменяем высоту при вводе текста
       field.addEventListener('input', () => autoResizeField(field));
     });
   });
 
   document.addEventListener('DOMContentLoaded', () => {
-    const resizableFields = document.querySelectorAll('textarea'); // Выбираем все текстовые области
+    const resizableFields = document.querySelectorAll('textarea');
 
     resizableFields.forEach((field) => {
-      // Изначальная корректировка высоты (если данные уже есть в полях)
       autoResizeField(field);
-
-      // Изменение высоты при вводе текста
       field.addEventListener('input', () => autoResizeField(field));
     });
   });
