@@ -134,7 +134,6 @@ app.get('/', async (req, res) => {
     try {
         const posts = await Post.find({ author: username }).sort({ createdAt: -1 });
 
-        // Вычисляем средний рейтинг для каждого поста
         const postsWithRatings = posts.map(post => {
             const totalRatings = post.comments.reduce((sum, comment) => sum + (comment.rating || 0), 0);
             const averageRating = post.comments.length
@@ -142,12 +141,11 @@ app.get('/', async (req, res) => {
                 : 'No ratings yet';
 
             return {
-                ...post.toObject(), // Преобразуем в объект для манипуляции
-                averageRating // Добавляем поле с рейтингом
+                ...post.toObject(),
+                averageRating
             };
         });
 
-        // Рендерим главную страницу с дополненным списком постов
         res.render(createPath('index'), { posts: postsWithRatings, title, username });
     } catch (error) {
         console.error(error);
@@ -205,7 +203,6 @@ app.get('/posts/:id', async (req, res) => {
             return res.status(404).render(createPath('error'), { title: 'Error', message: 'Post not found' });
         }
 
-        // Подсчет среднего рейтинга
         const totalRatings = post.comments.reduce((sum, comment) => sum + comment.rating, 0);
         const averageRating = post.comments.length ? (totalRatings / post.comments.length).toFixed(1) : 'No ratings yet';
 
@@ -222,7 +219,7 @@ app.get('/posts/:id', async (req, res) => {
 });
 app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
     Post.findByIdAndDelete(req.params.id)
-        .then(() => res.redirect(`/posts/`)) // Respond with 200 on success
+        .then(() => res.redirect(`/posts/`))
         .catch((error) => {
             console.log(error);
             res.render(createPath('error'), { title: 'Error' });
@@ -235,11 +232,9 @@ app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
     try {
         const { text, rating } = req.body;
 
-        // Проверка поля text
         if (!text) {
             return res.status(400).send('Comment text is required');
         }
-        // Проверка поля rating
         if (!rating || rating < 1 || rating > 10) {
             return res.status(400).send('Rating must be a number between 1 and 10');
         }
@@ -249,7 +244,6 @@ app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
             return res.status(404).send('Post not found');
         }
 
-        // Добавление комментария с рейтингом
         post.comments.push({
             text,
             author: req.session.username,
@@ -284,12 +278,10 @@ app.put('/edit/:id', authMiddleware, isAuthorMiddleware, upload.single('image'),
             text,
         };
 
-        // Если передано изображение, замените его
         if (req.file) {
             postData.image = {
                 data: req.file.buffer,
                 contentType: req.file.mimetype,
-
             };
         }
 
@@ -300,7 +292,6 @@ app.put('/edit/:id', authMiddleware, isAuthorMiddleware, upload.single('image'),
         res.render(createPath('error'), { title: 'Error', message: 'Failed to update post' });
     }
 });
-
 app.get('/add-post', authMiddleware, (req, res) => {
     const title = 'Add Post';
     res.render(createPath('add-post'), { title });
@@ -315,7 +306,6 @@ app.post('/add-post', authMiddleware, upload.single('image'), async (req, res) =
         author,
     });
 
-    // Если загружено изображение, сохраните его
     if (req.file) {
         post.image.data = req.file.buffer;
         post.image.contentType = req.file.mimetype;

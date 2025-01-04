@@ -154,13 +154,13 @@
     }
 
     #image-preview {
-      max-width: 100%; /* Максимальная ширина соответствует форме */
-      height: auto; /* Пропорциональная высота */
-      border-radius: 15px; /* Края изображения закруглены */
-      border: 2px solid #4e54c8; /* Оформление рамки */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Небольшая тень */
+      max-width: 100%;
+      height: auto;
+      border-radius: 15px;
+      border: 2px solid #4e54c8;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       margin-top: 1rem;
-      display: none; /* Скрываем по умолчанию */
+      display: none;
     }
     .file-upload {
       display: flex;
@@ -195,7 +195,7 @@
     }
 
     input[type="file"] {
-      display: none; /* Скрываем стандартный элемент */
+      display: none;
     }
   </style>
 
@@ -256,21 +256,19 @@
     });
   });
   document.getElementById('image').addEventListener('change', function (event) {
-    const preview = document.getElementById('image-preview'); // Превью-картинка
-    const file = event.target.files[0]; // Получаем первый загруженный файл
-    const reader = new FileReader(); // Создаем объект FileReader для чтения файла
+    const preview = document.getElementById('image-preview');
+    const file = event.target.files[0];
+    const reader = new FileReader();
 
-    // Когда файл прочитан, обновляем src у картинки
     reader.onload = function (e) {
-      preview.src = e.target.result; // Устанавливаем источник для картинки
-      preview.style.display = 'block'; // Показываем картинку
+      preview.src = e.target.result;
+      preview.style.display = 'block';
     };
 
-    // Если выбран файл, преобразуем его в DataURL
     if (file) {
-      reader.readAsDataURL(file); // Читаем файл как DataURL
+      reader.readAsDataURL(file);
     } else {
-      preview.src = "#"; // Если сбросили файл — скрываем картинку
+      preview.src = "#";
       preview.style.display = 'none';
     }
   });

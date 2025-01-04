@@ -9,7 +9,6 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
   <style>
-    /* --- Общий стиль --- */
     body {
       margin: 0;
       padding: 0;
@@ -20,7 +19,6 @@
       min-height: 100vh;
     }
 
-    /* Навигационный бар */
     nav {
       width: 100%;
       background: linear-gradient(to bottom, #4e54c8, #3b3e9a);
@@ -59,7 +57,6 @@
       transform: scale(1.1);
     }
 
-    /* Контейнер поста */
     .post-container {
       width: 90%;
       max-width: 800px;
@@ -103,14 +100,14 @@
     }
 
 
-    /* Комментарии */
+
     .comments-section {
-      word-wrap: break-word; /* Принудительный перенос длинных слов */
-      overflow-wrap: break-word; /* Альтернативный способ для переноса текста */
-      max-width: 100%; /* Убедимся, что карточка не расширяется за пределы */
-      width: 90%; /* Совпадает с шириной поста .post-container */
-      max-width: 800px; /* Совпадает с максимальной шириной поста */
-      margin: 30px auto; /* Центрирование и отступ */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      max-width: 100%;
+      width: 90%;
+      max-width: 800px;
+      margin: 30px auto;
       padding: 1.5rem;
       background: #f4f7fc;
       color: #333;
@@ -164,7 +161,6 @@
       color: #6c70f1;
     }
 
-    /* Анимация */
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -179,20 +175,19 @@
 
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      width: 98%; /* На всю ширину экрана */
+      width: 98%;
       padding: 1rem;
-      background-color: #4e54c8; /* Красивый градиент или однотонный фон */
-      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* Лёгкая тень для формы */
+      background-color: #4e54c8;
+      box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
     }
 
-    /* Текстовое поле */
     form textarea {
-      flex: 1; /* Занимает максимум доступного пространства */
-      resize: none; /* Убираем возможность изменения размера */
+      flex: 1;
+      resize: none;
       padding: 0.8rem;
       font-size: 1rem;
       border: none;
@@ -209,9 +204,9 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
       position: relative;
       animation: fadeIn 0.5s ease-in-out;
-      word-wrap: break-word; /* Принудительный перенос длинных слов */
-      overflow-wrap: break-word; /* Альтернативный способ для переноса текста */
-      max-width: 100%; /* Убедимся, что карточка не расширяется за пределы */
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      max-width: 100%;
     }
 
     article h2 a {
@@ -228,7 +223,7 @@
 
     article p {
       margin: 0.5rem 0;
-      line-height: 1.6; /* Увеличенный интервал для лучшей читаемости */
+      line-height: 1.6;
     }
 
     article p strong {
@@ -237,27 +232,24 @@
 
     .post-meta {
       display: flex;
-      justify-content: space-between; /* Автор слева, кнопки справа */
-      align-items: center; /* Выравниваем элементы по вертикали */
-      margin-top: 1rem; /* Отступ между текстом поста и метаинформацией */
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
     }
 
-    /* Текст автора */
     .post-meta p {
-      margin: 0; /* Убираем лишние отступы */
+      margin: 0;
       font-size: 1rem;
       color: #f1f1f1;
     }
-    /* Контейнер кнопок */
     .buttons {
       width: 100%;
       display: flex;
       justify-content: flex-end;
-      gap: 0.5rem; /* Расстояние между кнопками */
+      gap: 0.5rem;
       margin-top: 1rem;
     }
 
-    /* Кнопки */
     form button {
       padding: 0.7rem;
       background: #3b3e9a;
@@ -269,8 +261,8 @@
       cursor: pointer;
       transition: background 0.3s ease-in-out, transform 0.2s;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      width: 100px; /* Устанавливаем одинаковую ширину */
-      text-align: center; /* Текст по центру кнопки */
+      width: 100px;
+      text-align: center;
     }
 
     form button:hover {
@@ -282,7 +274,6 @@
       transform: scale(1);
     }
 
-    /* Анимация */
     @keyframes fadeIn {
       from {
         opacity: 0;
@@ -294,11 +285,11 @@
       }
     }
     img {
-      width: 100%; /* Полная ширина блока */
-      height: auto; /* Пропорциональная высота */
-      border-radius: 10px; /* Округленные углы */
-      margin-bottom: 1rem; /* Отступ между изображением и следующими элементами */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для красоты */
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
@@ -354,7 +345,6 @@
   </ul>
 
   <%
-  // Проверяем, есть ли пользователь в списке авторов комментариев
   const userCommented = post.comments.some(comment => comment.author === username);
   %>
 
