@@ -70,7 +70,7 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 
 app.use(express.static('styles'));
@@ -124,21 +124,33 @@ app.get('/logout', (req, res) => {
 
 
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     const title = 'Home';
     const username = req.session.username;
 
-    Post.find({author: username})
-        .sort({ createdAt: -1 })
-        .then(posts => {
-            res.render(createPath('index'), { posts, title, username }); // Pass username to EJS view
-        })
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
-        });
-});
+    try {
+        const posts = await Post.find({ author: username }).sort({ createdAt: -1 });
 
+        // Вычисляем средний рейтинг для каждого поста
+        const postsWithRatings = posts.map(post => {
+            const totalRatings = post.comments.reduce((sum, comment) => sum + (comment.rating || 0), 0);
+            const averageRating = post.comments.length
+                ? (totalRatings / post.comments.length).toFixed(1)
+                : 'No ratings yet';
+
+            return {
+                ...post.toObject(), // Преобразуем в объект для манипуляции
+                averageRating // Добавляем поле с рейтингом
+            };
+        });
+
+        // Рендерим главную страницу с дополненным списком постов
+        res.render(createPath('index'), { posts: postsWithRatings, title, username });
+    } catch (error) {
+        console.error(error);
+        res.render(createPath('error'), { title: 'Error', message: 'Failed to load posts' });
+    }
+});
 
 
 app.get('/about-us', (req, res) => {
@@ -155,35 +167,55 @@ app.get('/contacts', (req, res) => {
 });
 
 
-app.get('/posts', (req, res) => {
+app.get('/posts', async (req, res) => {
     const title = 'Posts';
     const username = req.session.username;
 
-    Post.find()
-        .sort({ createdAt: -1 })
-        .then(posts => {
-            res.render(createPath('posts'), { posts, title, username });
-        })
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
+    try {
+        const posts = await Post.find().sort({ createdAt: -1 });
+
+        // Для каждого поста вычисляем средний рейтинг
+        const postsWithRatings = posts.map(post => {
+            const totalRatings = post.comments.reduce((sum, comment) => sum + (comment.rating || 0), 0);
+            const averageRating = post.comments.length ? (totalRatings / post.comments.length).toFixed(1) : 'No ratings yet';
+
+            return {
+                ...post.toObject(), // Преобразуем для корректного использования
+                averageRating  // Добавляем средний рейтинг
+            };
         });
+
+        // Рендерим с учетом новых данных
+        res.render(createPath('posts'), { posts: postsWithRatings, title, username });
+    } catch (error) {
+        console.error(error);
+        res.render(createPath('error'), { title: 'Error', message: 'Failed to load posts' });
+    }
 });
 
-app.get('/posts/:id', (req, res) => {
+app.get('/posts/:id', async (req, res) => {
     const title = 'Post';
 
-    Post.findById(req.params.id)
-        .then(post => {
-            if (!post) {
-                return res.status(404).render(createPath('error'), { title: 'Error', message: 'Post not found' });
-            }
-            res.render(createPath('post'), { post, title, username: req.session.username });
-        })
-        .catch((error) => {
-            console.error(error);
-            res.status(500).render(createPath('error'), { title: 'Error', message: 'Server error occurred' });
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).render(createPath('error'), { title: 'Error', message: 'Post not found' });
+        }
+
+        // Подсчет среднего рейтинга
+        const totalRatings = post.comments.reduce((sum, comment) => sum + comment.rating, 0);
+        const averageRating = post.comments.length ? (totalRatings / post.comments.length).toFixed(1) : 'No ratings yet';
+
+        res.render(createPath('post'), {
+            post,
+            title,
+            username: req.session.username,
+            averageRating
         });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render(createPath('error'), { title: 'Error', message: 'Server error occurred' });
+    }
 });
 app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
     Post.findByIdAndDelete(req.params.id)
@@ -198,10 +230,15 @@ app.delete('/posts/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
 
 app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
     try {
-        const { text } = req.body;
+        const { text, rating } = req.body;
 
+        // Проверка поля text
         if (!text) {
             return res.status(400).send('Comment text is required');
+        }
+        // Проверка поля rating
+        if (!rating || rating < 1 || rating > 10) {
+            return res.status(400).send('Rating must be a number between 1 and 10');
         }
 
         const post = await Post.findById(req.params.id);
@@ -209,7 +246,12 @@ app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
             return res.status(404).send('Post not found');
         }
 
-        post.comments.push({ text, author: req.session.username });
+        // Добавление комментария с рейтингом
+        post.comments.push({
+            text,
+            author: req.session.username,
+            rating
+        });
         await post.save();
 
         res.redirect(`/posts/${req.params.id}`);
@@ -218,6 +260,7 @@ app.post('/posts/:id/comments', authMiddleware, async (req, res) => {
         res.status(500).render(createPath('error'), { title: 'Error', message: 'Failed to add comment' });
     }
 });
+
 
 app.get('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
     const title = 'Edit Post';

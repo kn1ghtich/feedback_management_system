@@ -308,13 +308,12 @@
 </nav>
 
 <div class="post-container">
-
   <div class="post-meta">
     <h2><%= post.title %></h2>
     <p> <%= post.createdAt.toLocaleDateString() %></p>
   </div>
   <p><%= post.text %></p>
-
+  <h2>⭐<%= averageRating %></h2>
   <div class="post-meta">
     <p><strong>Author:</strong> <%= post.author %></p>
 
@@ -338,6 +337,7 @@
       <li>
         <p><strong><%= comment.author %>:</strong> </p>
         <p><%= comment.text %></p>
+        <p>⭐<%= comment.rating %></p>
         <p><small><%= post.createdAt.toLocaleTimeString('eu-EU', { hour: '2-digit', minute: '2-digit'}) %>,      <%= post.createdAt.toLocaleDateString() %></small></p>
       </li>
     <% }) %>
@@ -350,8 +350,10 @@
 
   <% if (username && !userCommented) { %>
     <form action="/posts/<%= post._id %>/comments" method="POST">
-      <textarea name="text" rows="3" placeholder="Leave a comment..." required></textarea>
-      <button type="submit">Submit</button>
+      <textarea name="text" placeholder="Leave a comment" required></textarea>
+      <label for="rating" style="color: white">Rate this post (1-10):</label>
+      <input type="number" name="rating" min="1" max="10" required>
+      <button type="submit">Add Comment</button>
     </form>
   <% } else if (!username) { %>
     <div class="not-logged-in">

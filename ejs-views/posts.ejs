@@ -191,7 +191,13 @@
         <p>
           <%= post.text.length > 150 ? post.text.substring(0, 150) + '...' : post.text %>
         </p>
-
+        <h2>⭐
+          <% if (post.averageRating === 'No ratings yet') { %>
+            <em><%= post.averageRating %></em>
+          <% } else { %>
+            <%= post.averageRating %>
+          <% } %>
+        </h2>
 
         <div class="post-meta">
           <p><strong>Author:</strong> <%= post.author %></p>

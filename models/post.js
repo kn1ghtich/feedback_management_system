@@ -10,6 +10,11 @@ const commentSchema = new Schema({
         type: String, // You can also link this to a User model's ObjectID
         required: true,
     },
+    rating: {
+        type: Number,
+        required: true,
+        min: 1, max: 10
+    },
 }, { timestamps: true });
 
 
