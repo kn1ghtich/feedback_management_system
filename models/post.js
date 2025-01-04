@@ -31,6 +31,10 @@ const postSchema = new Schema({
         type: String,
         required: true,
     },
+    image: {
+        data: Buffer,
+        contentType: String,
+    },
     comments: [commentSchema] // Embedded comments
 }, { timestamps: true });
 

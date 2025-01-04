@@ -7,6 +7,9 @@ const User = require('./models/user');
 const methodOverride = require('method-override');
 const Post = require('./models/post');
 const Contact = require('./models/contact');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const app = express();
 
@@ -272,33 +275,57 @@ app.get('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
             res.render(createPath('error'), { title: 'Error' });
         });
 });
-app.put('/edit/:id', authMiddleware, isAuthorMiddleware, (req, res) => {
+app.put('/edit/:id', authMiddleware, isAuthorMiddleware, upload.single('image'), async (req, res) => {
     const { title, text } = req.body;
-    const { id } = req.params;
 
-    Post.findByIdAndUpdate(id, { title, text })
-        .then(() => res.redirect(`/posts/${id}`))
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
-        });
+    try {
+        const postData = {
+            title,
+            text,
+        };
+
+        // Если передано изображение, замените его
+        if (req.file) {
+            postData.image = {
+                data: req.file.buffer,
+                contentType: req.file.mimetype,
+            };
+        }
+
+        await Post.findByIdAndUpdate(req.params.id, postData);
+        res.redirect(`/posts/${req.params.id}`);
+    } catch (error) {
+        console.error(error);
+        res.render(createPath('error'), { title: 'Error', message: 'Failed to update post' });
+    }
 });
-
 app.get('/add-post', authMiddleware, (req, res) => {
     const title = 'Add Post';
     res.render(createPath('add-post'), { title });
 });
-app.post('/add-post', authMiddleware, (req, res) => {
+app.post('/add-post', authMiddleware, upload.single('image'), async (req, res) => {
     const { title, text } = req.body;
     const author = req.session.username;
 
-    const post = new Post({ title, author, text }); // Assign the author from the session
-    post.save()
-        .then(() => res.redirect('/posts'))
-        .catch((error) => {
-            console.log(error);
-            res.render(createPath('error'), { title: 'Error' });
-        });
+    const post = new Post({
+        title,
+        text,
+        author,
+    });
+
+    // Если загружено изображение, сохраните его
+    if (req.file) {
+        post.image.data = req.file.buffer;
+        post.image.contentType = req.file.mimetype;
+    }
+
+    try {
+        await post.save();
+        res.redirect('/posts');
+    } catch (error) {
+        console.error(error);
+        res.render(createPath('error'), { title: 'Error', message: 'Failed to create post' });
+    }
 });
 
 app.use((req, res) => {

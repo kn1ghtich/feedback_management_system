@@ -148,6 +148,55 @@
         transform: translateY(0);
       }
     }
+    .preview-container {
+
+      text-align: center;
+    }
+
+    #image-preview {
+      max-width: 100%; /* Максимальная ширина соответствует форме */
+      height: auto; /* Пропорциональная высота */
+      border-radius: 15px; /* Края изображения закруглены */
+      border: 2px solid #4e54c8; /* Оформление рамки */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Небольшая тень */
+      margin-top: 1rem;
+      display: none; /* Скрываем по умолчанию */
+    }
+    .file-upload {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-top: 1.5rem;
+    }
+
+    .custom-file-label {
+      display: inline-block;
+      background: linear-gradient(to bottom, #4e54c8, #6c70f1);
+      color: #fff;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-file-label:hover {
+      background: #3b3e9a;
+      transform: scale(1.05);
+    }
+
+    .custom-file-label:active {
+      transform: scale(1);
+    }
+
+    input[type="file"] {
+      display: none; /* Скрываем стандартный элемент */
+    }
   </style>
 
 </head>
@@ -164,13 +213,21 @@
 
 <div class="page-container">
   <h1>Add Post</h1>
-  <form action="/add-post" method="POST">
+  <form action="/add-post" method="POST" enctype="multipart/form-data">
     <label for="title">Title:</label>
-    <div class="auto-resize" id="title-container">
-      <input type="text" id="title" name="title" placeholder="Enter your title" required>
-    </div>
+    <input type="text" id="title" name="title" placeholder="Enter your title" required>
+
     <label for="text">Content:</label>
     <textarea id="text" name="text" required></textarea>
+
+    <div class="file-upload">
+      <label for="image" class="custom-file-label">Select an Image</label>
+      <input type="file" id="image" name="image" accept="image/*">
+    </div>
+
+    <div class="preview-container">
+      <img id="image-preview" src="#" alt="Selected Image" style="display: none;">
+    </div>
 
     <button type="submit">Add Post</button>
   </form>
@@ -197,6 +254,25 @@
       autoResizeField(field);
       field.addEventListener('input', () => autoResizeField(field));
     });
+  });
+  document.getElementById('image').addEventListener('change', function (event) {
+    const preview = document.getElementById('image-preview'); // Превью-картинка
+    const file = event.target.files[0]; // Получаем первый загруженный файл
+    const reader = new FileReader(); // Создаем объект FileReader для чтения файла
+
+    // Когда файл прочитан, обновляем src у картинки
+    reader.onload = function (e) {
+      preview.src = e.target.result; // Устанавливаем источник для картинки
+      preview.style.display = 'block'; // Показываем картинку
+    };
+
+    // Если выбран файл, преобразуем его в DataURL
+    if (file) {
+      reader.readAsDataURL(file); // Читаем файл как DataURL
+    } else {
+      preview.src = "#"; // Если сбросили файл — скрываем картинку
+      preview.style.display = 'none';
+    }
   });
 </script>
 

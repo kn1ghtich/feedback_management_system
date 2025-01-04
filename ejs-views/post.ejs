@@ -293,6 +293,13 @@
         transform: translateY(0);
       }
     }
+    img {
+      width: 100%; /* Полная ширина блока */
+      height: auto; /* Пропорциональная высота */
+      border-radius: 10px; /* Округленные углы */
+      margin-bottom: 1rem; /* Отступ между изображением и следующими элементами */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для красоты */
+    }
   </style>
 </head>
 
@@ -308,6 +315,9 @@
 </nav>
 
 <div class="post-container">
+  <% if (post.image && post.image.data) { %>
+    <img src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>" alt="Post Image"  >
+  <% } %>
   <div class="post-meta">
     <h2><%= post.title %></h2>
     <p> <%= post.createdAt.toLocaleDateString() %></p>

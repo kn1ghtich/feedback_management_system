@@ -162,6 +162,13 @@
         transform: translateY(0);
       }
     }
+    article img {
+      width: 100%; /* Полная ширина блока */
+      height: auto; /* Пропорциональная высота */
+      border-radius: 10px; /* Округленные углы */
+      margin-bottom: 1rem; /* Отступ между изображением и следующими элементами */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для красоты */
+    }
   </style>
 </head>
 
@@ -183,6 +190,9 @@
     <li>
       <a href="/posts/<%= post._id %>">
       <article>
+        <% if (post.image && post.image.data) { %>
+          <img src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>" alt="Post Image"  >
+        <% } %>
         <h2>
           <a href="/posts/<%= post._id %>" title="View Post">
             <%= post.title.length > 50 ? post.title.substring(0, 50) + '...' : post.title %>
