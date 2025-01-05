@@ -9,6 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const createPath= require('./helper/create-path');
 const authMiddleware = require('./helper/auth-midl');
+const Post = require("./models/post");
 
 app.set('view engine', 'ejs');
 
@@ -37,6 +38,33 @@ app.use(express.static('styles'));
 app.use('/protected-styles', authMiddleware, express.static('styles'));
 app.use(methodOverride('_method'));
 //
+
+
+app.get('/', async (req, res) => {
+    const title = 'Home';
+    const username = req.session.username;
+
+    try {
+        const posts = await Post.find({ author: username }).sort({ createdAt: -1 });
+
+        const postsWithRatings = posts.map(post => {
+            const totalRatings = post.comments.reduce((sum, comment) => sum + (comment.rating || 0), 0);
+            const averageRating = post.comments.length
+                ? (totalRatings / post.comments.length).toFixed(1)
+                : 'No ratings yet';
+
+            return {
+                ...post.toObject(),
+                averageRating
+            };
+        });
+
+        res.render(createPath('index'), { posts: postsWithRatings, title, username });
+    } catch (error) {
+        console.error(error);
+        res.render(createPath('error'), { title: 'Error', message: 'Failed to load posts' });
+    }
+})
 
 app.use(authRoutes);
 app.use(postRoutes);

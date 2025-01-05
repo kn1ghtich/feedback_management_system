@@ -147,31 +147,6 @@ const addPostPost = async (req, res) => {
     }
 }
 
-const homeGet = async (req, res) => {
-    const title = 'Home';
-    const username = req.session.username;
-
-    try {
-        const posts = await Post.find({ author: username }).sort({ createdAt: -1 });
-
-        const postsWithRatings = posts.map(post => {
-            const totalRatings = post.comments.reduce((sum, comment) => sum + (comment.rating || 0), 0);
-            const averageRating = post.comments.length
-                ? (totalRatings / post.comments.length).toFixed(1)
-                : 'No ratings yet';
-
-            return {
-                ...post.toObject(),
-                averageRating
-            };
-        });
-
-        res.render(createPath('index'), { posts: postsWithRatings, title, username });
-    } catch (error) {
-        console.error(error);
-        res.render(createPath('error'), { title: 'Error', message: 'Failed to load posts' });
-    }
-}
 module.exports = {
     getPosts,
     getPostById,
@@ -181,5 +156,4 @@ module.exports = {
     postComment,
     addPostGet,
     addPostPost,
-    homeGet,
 }

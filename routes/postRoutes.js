@@ -35,7 +35,6 @@ const {
     postComment,
     addPostGet,
     addPostPost,
-    homeGet,
 } = require('../controllers/postController');
 
 router.get('/posts', getPosts);
@@ -46,7 +45,7 @@ router.get('/edit/:id', authMiddleware, isAuthorMiddleware, editPostGet);
 router.put('/edit/:id', authMiddleware, isAuthorMiddleware, upload.single('image'), editPostPut);
 router.get('/add-post', authMiddleware, addPostGet);
 router.post('/add-post', authMiddleware, upload.single('image'), addPostPost);
-router.get('/', homeGet);
+
 
 
 module.exports = router;
