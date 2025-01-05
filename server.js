@@ -23,8 +23,8 @@ mongoose
 
 
 
-app.listen(PORT, (error) => {
-    error ? console.log(error) : console.log(`listening port ${PORT}`);
+app.listen(PORT, () => {
+    console.log(`listening port ${PORT}`);
 });
 app.use(session({
     secret: 'your-secret-key',
