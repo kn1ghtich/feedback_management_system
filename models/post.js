@@ -7,7 +7,7 @@ const commentSchema = new Schema({
         required: true,
     },
     author: {
-        type: String, // You can also link this to a User model's ObjectID
+        type: String,
         required: true,
     },
     rating: {
@@ -35,7 +35,7 @@ const postSchema = new Schema({
         data: Buffer,
         contentType: String,
     },
-    comments: [commentSchema] // Embedded comments
+    comments: [commentSchema]
 }, { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);
