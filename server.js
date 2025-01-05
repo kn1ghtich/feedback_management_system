@@ -12,8 +12,8 @@ const authMiddleware = require('./helper/auth-midl');
 
 app.set('view engine', 'ejs');
 
-const PORT = process.env.PORT;
-const db = process.env.MONGO_URL;
+const PORT = 3000;
+const db =  'mongodb+srv://groupd:groupd@feedbackmanagementsyste.23dx4.mongodb.net/FeedbackManagementSystem?retryWrites=true&w=majority&appName=FeedbackManagementSystem';
 
 
 mongoose
