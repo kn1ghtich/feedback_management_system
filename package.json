@@ -4,7 +4,7 @@
   "description": "This is group work of Arsen, Artyom, Bauyrzhan, Rayimbek. Feedback Management system An app for companies to collect, analyze and display customer feedback.",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "node server.js"
   },
   "repository": {
     "type": "git",
