@@ -11,6 +11,8 @@ const createPath= require('./helper/create-path');
 const authMiddleware = require('./helper/auth-midl');
 const Post = require("./models/post");
 
+
+
 app.set('view engine', 'ejs');
 
 const PORT = 3000;
@@ -31,6 +33,9 @@ app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        maxAge: 60 * 60 * 1000 // 1 hour in milliseconds
+    }
 }));
 // middlewares
 app.use(express.urlencoded({ extended: true }));
