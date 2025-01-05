@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const app = express();
+require('dotenv').config();
 const contactRoutes = require('./routes/contactRoutes');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
@@ -11,8 +12,8 @@ const authMiddleware = require('./helper/auth-midl');
 
 app.set('view engine', 'ejs');
 
-const PORT = 3000;
-const db = 'mongodb+srv://groupd:groupd@feedbackmanagementsyste.23dx4.mongodb.net/FeedbackManagementSystem?retryWrites=true&w=majority&appName=FeedbackManagementSystem';
+const PORT = process.env.PORT;
+const db = process.env.MONGO_URL;
 
 
 mongoose
