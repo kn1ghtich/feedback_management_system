@@ -33,8 +33,9 @@ app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
+    rolling: true,
     cookie: {
-        maxAge: 60 * 60 * 1000 // 1 hour in milliseconds
+        maxAge: 60 * 1000 // 1 hour in milliseconds
     }
 }));
 // middlewares
